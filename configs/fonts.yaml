@@ -1,0 +1,5 @@
+fonts: {dirs: ["fonts/bengali", "fonts/english"], registry: "fonts/registry.json"}
+distribution:
+  bn: [["noto_sans_bengali", 0.30], ["hind_siliguri", 0.30], ["noto_serif_bengali", 0.15]]
+  en: [["inter", 0.50]]
+fallback: log

@@ -1,0 +1,9 @@
+augmentation:
+  rotation: {enabled: true, max_degrees: 7}
+  perspective: {enabled: true, probability: 0.35}
+  blur: {enabled: true, probability: 0.25}
+  noise: {enabled: true, probability: 0.30}
+  jpeg: {enabled: true, probability: 0.30}
+  lighting: {enabled: true, probability: 0.25}
+tiers: {clean: 0.40, light: 0.30, moderate: 0.20, heavy: 0.10}
+resolutions: [400, 300, 200, 150, 100]
