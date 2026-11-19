@@ -1,0 +1,66 @@
+# =============================================================================
+# DocExtract — repository hygiene
+# Everything on the external drive stays local; only source, configs, docs and
+# small sample assets are versioned.
+# =============================================================================
+
+# --- Python virtual environments & caches (large / machine-specific) ---
+.venv/
+.venv-paddle/
+.venv*/
+.local/
+.cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+pip-wheel-metadata/
+
+# --- Model weights, generated datasets, job outputs, logs ---
+checkpoints/
+data/
+outputs/
+logs/
+experiments/
+*.pt
+*.pth
+*.safetensors
+*.onnx
+*.ckpt
+!ocr_app/assets/tessdata/*.traineddata
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# --- Flutter / Dart build artifacts ---
+ocr_app/build/
+ocr_app/.dart_tool/
+ocr_app/.flutter-plugins-dependencies
+ocr_app/.flutter-plugins
+ocr_app/.packages
+ocr_app/.pub-cache/
+ocr_app/android/.gradle/
+ocr_app/android/local.properties
+ocr_app/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+ocr_app/macos/Flutter/ephemeral/
+ocr_app/macos/Pods/
+ocr_app/macos/.symlinks/
+ocr_app/ios/Pods/
+ocr_app/ios/.symlinks/
+*.iml
+
+# --- Runtime PID / state files ---
+.cache/run/
+*.pid
+
+# --- Local secrets / env overrides ---
+.env
+.env.local
+.env.lerd_override
+*.log
