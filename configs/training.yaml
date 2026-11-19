@@ -1,0 +1,7 @@
+model: {name: "microsoft/trocr-base-printed", max_params: 500000000}
+training: {epochs: 3, max_steps: 800, batch_size: 8, gradient_accumulation_steps: 2,
+  learning_rate: 2.0e-5, weight_decay: 0.01, warmup_ratio: 0.05, mixed_precision: bf16,
+  freeze_encoder: false, early_stopping_patience: 3, seed: 42}
+dataset: {train: "data/v001/train.tsv", validation: "data/v001/val.tsv", test: "data/v001/test.tsv", images_root: "data/v001"}
+lora: {enabled: true, rank: 16, alpha: 32, dropout: 0.05, target_modules: [q_proj, v_proj]}
+output: {dir: "checkpoints/exp001", save_best: true}

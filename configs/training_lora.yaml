@@ -1,0 +1,7 @@
+model: {name: "microsoft/trocr-small-printed", max_params: 500000000}
+training: {epochs: 1, max_steps: 200, batch_size: 8, gradient_accumulation_steps: 2,
+  learning_rate: 1.0e-4, weight_decay: 0.0, warmup_ratio: 0.1, mixed_precision: bf16,
+  freeze_encoder: true, early_stopping_patience: 5, seed: 42}
+dataset: {train: "data/v001/lines/train.tsv", validation: "data/v001/lines/val.tsv", test: "data/v001/lines/test.tsv", images_root: "data/v001/lines"}
+lora: {enabled: true, rank: 16, alpha: 32, dropout: 0.05, target_modules: [q_proj, v_proj]}
+output: {dir: "checkpoints/lines_small_lora", save_best: true}
