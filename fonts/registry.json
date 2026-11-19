@@ -1,0 +1,3741 @@
+{
+  "fonts": {
+    "inter": {
+      "path": "/Volumes/SSD-SIMANTO/works/ocr/fonts/english/Inter.ttf",
+      "family": "Inter",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "bundled"
+    },
+    "hind_siliguri": {
+      "path": "/Volumes/SSD-SIMANTO/works/ocr/fonts/bengali/HindSiliguri-Medium.ttf",
+      "family": "Hind Siliguri",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "medium",
+        "regular",
+        "bold"
+      ],
+      "source": "bundled"
+    },
+    "noto_sans_bengali": {
+      "path": "/Volumes/SSD-SIMANTO/works/ocr/fonts/bengali/NotoSansBengali.ttf",
+      "family": "Noto Sans Bengali",
+      "language": [
+        "bn",
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "bundled"
+    },
+    "noto_serif_bengali": {
+      "path": "/Volumes/SSD-SIMANTO/works/ocr/fonts/bengali/NotoSerifBengali.ttf",
+      "family": "Noto Serif Bengali",
+      "language": [
+        "bn",
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "bundled"
+    },
+    "symbol": {
+      "path": "/System/Library/Fonts/Symbol.ttf",
+      "family": "Symbol",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "geneva": {
+      "path": "/System/Library/Fonts/Geneva.ttf",
+      "family": "Geneva",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_ns_mono": {
+      "path": "/System/Library/Fonts/SFNSMono.ttf",
+      "family": ".SF NS Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "sf_georgian": {
+      "path": "/System/Library/Fonts/SFGeorgian.ttf",
+      "family": ".SF Georgian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_hebrew": {
+      "path": "/System/Library/Fonts/SFHebrew.ttf",
+      "family": ".SF Hebrew",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "zapf_dingbats": {
+      "path": "/System/Library/Fonts/ZapfDingbats.ttf",
+      "family": "Zapf Dingbats",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_armenian": {
+      "path": "/System/Library/Fonts/SFArmenian.ttf",
+      "family": ".SF Armenian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "apple_braille": {
+      "path": "/System/Library/Fonts/Apple Braille.ttf",
+      "family": "Apple Braille",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_compact": {
+      "path": "/System/Library/Fonts/SFCompact.ttf",
+      "family": ".SF Compact",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "new_york": {
+      "path": "/System/Library/Fonts/NewYork.ttf",
+      "family": ".New York",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "sf_ns": {
+      "path": "/System/Library/Fonts/SFNS.ttf",
+      "family": ".SF NS",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "sf_camera": {
+      "path": "/System/Library/Fonts/SFCamera.ttf",
+      "family": ".SF Camera",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_armenian_rounded": {
+      "path": "/System/Library/Fonts/SFArmenianRounded.ttf",
+      "family": ".SF Armenian Rounded",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "monaco": {
+      "path": "/System/Library/Fonts/Monaco.ttf",
+      "family": "Monaco",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "apple_symbols": {
+      "path": "/System/Library/Fonts/Apple Symbols.ttf",
+      "family": "Apple Symbols",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_arabic": {
+      "path": "/System/Library/Fonts/SFArabic.ttf",
+      "family": ".SF Arabic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_ns_rounded": {
+      "path": "/System/Library/Fonts/SFNSRounded.ttf",
+      "family": ".SF NS Rounded",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "keyboard": {
+      "path": "/System/Library/Fonts/Keyboard.ttf",
+      "family": ".Keyboard",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_georgian_rounded": {
+      "path": "/System/Library/Fonts/SFGeorgianRounded.ttf",
+      "family": ".SF Georgian Rounded",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_compact_rounded": {
+      "path": "/System/Library/Fonts/SFCompactRounded.ttf",
+      "family": ".SF Compact Rounded",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_arabic_rounded": {
+      "path": "/System/Library/Fonts/SFArabicRounded.ttf",
+      "family": ".SF Arabic Rounded",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_hebrew_rounded": {
+      "path": "/System/Library/Fonts/SFHebrewRounded.ttf",
+      "family": ".SF Hebrew Rounded",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_lepcha": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLepcha-Regular.ttf",
+      "family": "Noto Sans Lepcha",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "webdings": {
+      "path": "/System/Library/Fonts/Supplemental/Webdings.ttf",
+      "family": "Webdings",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_mandaic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMandaic-Regular.ttf",
+      "family": "Noto Sans Mandaic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "zapfino": {
+      "path": "/System/Library/Fonts/Supplemental/Zapfino.ttf",
+      "family": "Zapfino",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_caucalban": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCaucasianAlbanian-Regular.ttf",
+      "family": "Noto Sans CaucAlban",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "trebuchet_ms": {
+      "path": "/System/Library/Fonts/Supplemental/Trebuchet MS Italic.ttf",
+      "family": "Trebuchet MS",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "regular",
+        "bold"
+      ],
+      "source": "system"
+    },
+    "noto_sans_oldhung": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldHungarian-Regular.ttf",
+      "family": "Noto Sans OldHung",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "georgia": {
+      "path": "/System/Library/Fonts/Supplemental/Georgia.ttf",
+      "family": "Georgia",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic",
+        "bold"
+      ],
+      "source": "system"
+    },
+    "noto_sans_saurashtra": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSaurashtra-Regular.ttf",
+      "family": "Noto Sans Saurashtra",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_multani": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMultani-Regular.ttf",
+      "family": "Noto Sans Multani",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_hatran": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansHatran-Regular.ttf",
+      "family": "Noto Sans Hatran",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "verdana": {
+      "path": "/System/Library/Fonts/Supplemental/Verdana Bold.ttf",
+      "family": "Verdana",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bodoni_72_smallcaps": {
+      "path": "/System/Library/Fonts/Supplemental/Bodoni 72 Smallcaps Book.ttf",
+      "family": "Bodoni 72 Smallcaps",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_inspahlavi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansInscriptionalPahlavi-Regular.ttf",
+      "family": "Noto Sans InsPahlavi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_hanunoo": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansHanunoo-Regular.ttf",
+      "family": "Noto Sans Hanunoo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "times_new_roman": {
+      "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf",
+      "family": "Times New Roman",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "silom": {
+      "path": "/System/Library/Fonts/Supplemental/Silom.ttf",
+      "family": "Silom",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_bhaiksuki": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBhaiksuki-Regular.ttf",
+      "family": "Noto Sans Bhaiksuki",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_cham": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCham-Regular.ttf",
+      "family": "Noto Sans Cham",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_manichaean": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansManichaean-Regular.ttf",
+      "family": "Noto Sans Manichaean",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_nko": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansNKo-Regular.ttf",
+      "family": "Noto Sans NKo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_kayah_li": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansKayahLi-Regular.ttf",
+      "family": "Noto Sans Kayah Li",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_osage": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOsage-Regular.ttf",
+      "family": "Noto Sans Osage",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_adlam": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansAdlam-Regular.ttf",
+      "family": "Noto Sans Adlam",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_pahawh_hmong": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansPahawhHmong-Regular.ttf",
+      "family": "Noto Sans Pahawh Hmong",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_mro": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMro-Regular.ttf",
+      "family": "Noto Sans Mro",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_avestan": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansAvestan-Regular.ttf",
+      "family": "Noto Sans Avestan",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bradley_hand": {
+      "path": "/System/Library/Fonts/Supplemental/Bradley Hand Bold.ttf",
+      "family": "Bradley Hand",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold"
+      ],
+      "source": "system"
+    },
+    "noto_sans_miao": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMiao-Regular.ttf",
+      "family": "Noto Sans Miao",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "arial_narrow": {
+      "path": "/System/Library/Fonts/Supplemental/Arial Narrow Italic.ttf",
+      "family": "Arial Narrow",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "bold",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_bassa_vah": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBassaVah-Regular.ttf",
+      "family": "Noto Sans Bassa Vah",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_syriac": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf",
+      "family": "Noto Sans Syriac",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_mende_kikakui": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMendeKikakui-Regular.ttf",
+      "family": "Noto Sans Mende Kikakui",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "applegothic": {
+      "path": "/System/Library/Fonts/Supplemental/AppleGothic.ttf",
+      "family": "AppleGothic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stix_two_text": {
+      "path": "/System/Library/Fonts/Supplemental/STIXTwoText-Italic.ttf",
+      "family": "STIX Two Text",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_lydian": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLydian-Regular.ttf",
+      "family": "Noto Sans Lydian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "din_condensed": {
+      "path": "/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf",
+      "family": "DIN Condensed",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold"
+      ],
+      "source": "system"
+    },
+    "noto_sans_chakma": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansChakma-Regular.ttf",
+      "family": "Noto Sans Chakma",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_nabataean": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansNabataean-Regular.ttf",
+      "family": "Noto Sans Nabataean",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_serif_hmong_nyiakeng": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSerifNyiakengPuachueHmong-Regular.ttf",
+      "family": "Noto Serif Hmong Nyiakeng",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "farisi": {
+      "path": "/System/Library/Fonts/Supplemental/Farisi.ttf",
+      "family": "Farisi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "arial": {
+      "path": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+      "family": "Arial",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "mishafi": {
+      "path": "/System/Library/Fonts/Supplemental/Mishafi.ttf",
+      "family": "Mishafi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_duployan": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansDuployan-Regular.ttf",
+      "family": "Noto Sans Duployan",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "academy_engraved_let": {
+      "path": "/System/Library/Fonts/Supplemental/Academy Engraved LET Fonts.ttf",
+      "family": "Academy Engraved LET",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_sorasomp": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSoraSompeng-Regular.ttf",
+      "family": "Noto Sans SoraSomp",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "trattatello": {
+      "path": "/System/Library/Fonts/Supplemental/Trattatello.ttf",
+      "family": "Trattatello",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_rejang": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansRejang-Regular.ttf",
+      "family": "Noto Sans Rejang",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_ugaritic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansUgaritic-Regular.ttf",
+      "family": "Noto Sans Ugaritic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_lycian": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLycian-Regular.ttf",
+      "family": "Noto Sans Lycian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "big_caslon": {
+      "path": "/System/Library/Fonts/Supplemental/BigCaslon.ttf",
+      "family": "Big Caslon",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_warangciti": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansWarangCiti-Regular.ttf",
+      "family": "Noto Sans WarangCiti",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "courier_new": {
+      "path": "/System/Library/Fonts/Supplemental/Courier New Bold.ttf",
+      "family": "Courier New",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gb18030_bitmap": {
+      "path": "/System/Library/Fonts/Supplemental/NISC18030.ttf",
+      "family": "GB18030 Bitmap",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_hanifirohg": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansHanifiRohingya-Regular.ttf",
+      "family": "Noto Sans HanifiRohg",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tirhuta": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTirhuta-Regular.ttf",
+      "family": "Noto Sans Tirhuta",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "lao_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf",
+      "family": "Lao Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tai_le": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTaiLe-Regular.ttf",
+      "family": "Noto Sans Tai Le",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_thaana": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansThaana-Regular.ttf",
+      "family": "Noto Sans Thaana",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "luminari": {
+      "path": "/System/Library/Fonts/Supplemental/Luminari.ttf",
+      "family": "Luminari",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "brush_script_mt": {
+      "path": "/System/Library/Fonts/Supplemental/Brush Script.ttf",
+      "family": "Brush Script MT",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "arial_unicode_ms": {
+      "path": "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+      "family": "Arial Unicode MS",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "chalkduster": {
+      "path": "/System/Library/Fonts/Supplemental/Chalkduster.ttf",
+      "family": "Chalkduster",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_sundanese": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSundanese-Regular.ttf",
+      "family": "Noto Sans Sundanese",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "apple_chancery": {
+      "path": "/System/Library/Fonts/Supplemental/Apple Chancery.ttf",
+      "family": "Apple Chancery",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "applemyungjo": {
+      "path": "/System/Library/Fonts/Supplemental/AppleMyungjo.ttf",
+      "family": "AppleMyungjo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_ol_chiki": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOlChiki-Regular.ttf",
+      "family": "Noto Sans Ol Chiki",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_carian": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCarian-Regular.ttf",
+      "family": "Noto Sans Carian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_nag_mundari": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansNagMundari-Regular.ttf",
+      "family": "Noto Sans Nag Mundari",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_modi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansModi-Regular.ttf",
+      "family": "Noto Sans Modi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_meroitic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMeroitic-Regular.ttf",
+      "family": "Noto Sans Meroitic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_palmyrene": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansPalmyrene-Regular.ttf",
+      "family": "Noto Sans Palmyrene",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_phagspa": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansPhagsPa-Regular.ttf",
+      "family": "Noto Sans PhagsPa",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_yi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansYi-Regular.ttf",
+      "family": "Noto Sans Yi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_psapahlavi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansPsalterPahlavi-Regular.ttf",
+      "family": "Noto Sans PsaPahlavi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_limbu": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLimbu-Regular.ttf",
+      "family": "Noto Sans Limbu",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_cypriot": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCypriot-Regular.ttf",
+      "family": "Noto Sans Cypriot",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_bamum": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBamum-Regular.ttf",
+      "family": "Noto Sans Bamum",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_lisu": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLisu-Regular.ttf",
+      "family": "Noto Sans Lisu",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "wingdings_3": {
+      "path": "/System/Library/Fonts/Supplemental/Wingdings 3.ttf",
+      "family": "Wingdings 3",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_mahajani": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMahajani-Regular.ttf",
+      "family": "Noto Sans Mahajani",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "wingdings_2": {
+      "path": "/System/Library/Fonts/Supplemental/Wingdings 2.ttf",
+      "family": "Wingdings 2",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_glagolitic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansGlagolitic-Regular.ttf",
+      "family": "Noto Sans Glagolitic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "hoefler_text_ornaments": {
+      "path": "/System/Library/Fonts/Supplemental/Hoefler Text Ornaments.ttf",
+      "family": "Hoefler Text Ornaments",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_serif_ahom": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSerifAhom-Regular.ttf",
+      "family": "Noto Serif Ahom",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bodoni_ornaments": {
+      "path": "/System/Library/Fonts/Supplemental/Bodoni Ornaments.ttf",
+      "family": "Bodoni Ornaments",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_vai": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansVai-Regular.ttf",
+      "family": "Noto Sans Vai",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tagbanwa": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTagbanwa-Regular.ttf",
+      "family": "Noto Sans Tagbanwa",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "skia": {
+      "path": "/System/Library/Fonts/Supplemental/Skia.ttf",
+      "family": "Skia",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_phoenician": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansPhoenician-Regular.ttf",
+      "family": "Noto Sans Phoenician",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "impact": {
+      "path": "/System/Library/Fonts/Supplemental/Impact.ttf",
+      "family": "Impact",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kokonor": {
+      "path": "/System/Library/Fonts/Supplemental/Kokonor.ttf",
+      "family": "Kokonor",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_kaithi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansKaithi-Regular.ttf",
+      "family": "Noto Sans Kaithi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_serif_balinese": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSerifBalinese-Regular.ttf",
+      "family": "Noto Serif Balinese",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_takri": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTakri-Regular.ttf",
+      "family": "Noto Sans Takri",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_egypthiero": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansEgyptianHieroglyphs-Regular.ttf",
+      "family": "Noto Sans EgyptHiero",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_samaritan": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSamaritan-Regular.ttf",
+      "family": "Noto Sans Samaritan",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_elbasan": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansElbasan-Regular.ttf",
+      "family": "Noto Sans Elbasan",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "party_let": {
+      "path": "/System/Library/Fonts/Supplemental/PartyLET-plain.ttf",
+      "family": "Party LET",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_kharoshthi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansKharoshthi-Regular.ttf",
+      "family": "Noto Sans Kharoshthi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "tahoma": {
+      "path": "/System/Library/Fonts/Supplemental/Tahoma Bold.ttf",
+      "family": "Tahoma",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "diwan_thuluth": {
+      "path": "/System/Library/Fonts/Supplemental/Diwan Thuluth.ttf",
+      "family": "Diwan Thuluth",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tagalog": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTagalog-Regular.ttf",
+      "family": "Noto Sans Tagalog",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "ayuthaya": {
+      "path": "/System/Library/Fonts/Supplemental/Ayuthaya.ttf",
+      "family": "Ayuthaya",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "khmer_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf",
+      "family": "Khmer Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_sharada": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSharada-Regular.ttf",
+      "family": "Noto Sans Sharada",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kefa_iii": {
+      "path": "/System/Library/Fonts/Supplemental/KefaIII.ttf",
+      "family": "Kefa III",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_khojki": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansKhojki-Regular.ttf",
+      "family": "Noto Sans Khojki",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_newtailue": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansNewTaiLue-Regular.ttf",
+      "family": "Noto Sans NewTaiLue",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_insparthi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansInscriptionalParthian-Regular.ttf",
+      "family": "Noto Sans InsParthi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_buhid": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBuhid-Regular.ttf",
+      "family": "Noto Sans Buhid",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "arial_black": {
+      "path": "/System/Library/Fonts/Supplemental/Arial Black.ttf",
+      "family": "Arial Black",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "comic_sans_ms": {
+      "path": "/System/Library/Fonts/Supplemental/Comic Sans MS.ttf",
+      "family": "Comic Sans MS",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "bold"
+      ],
+      "source": "system"
+    },
+    "noto_sans_khudawadi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansKhudawadi-Regular.ttf",
+      "family": "Noto Sans Khudawadi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_buginese": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBuginese-Regular.ttf",
+      "family": "Noto Sans Buginese",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_linear_b": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLinearB-Regular.ttf",
+      "family": "Noto Sans Linear B",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "din_alternate": {
+      "path": "/System/Library/Fonts/Supplemental/DIN Alternate Bold.ttf",
+      "family": "DIN Alternate",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold"
+      ],
+      "source": "system"
+    },
+    "wingdings": {
+      "path": "/System/Library/Fonts/Supplemental/Wingdings.ttf",
+      "family": "Wingdings",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_newa": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansNewa-Regular.ttf",
+      "family": "Noto Sans Newa",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sathu": {
+      "path": "/System/Library/Fonts/Supplemental/Sathu.ttf",
+      "family": "Sathu",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_syloti_nagri": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSylotiNagri-Regular.ttf",
+      "family": "Noto Sans Syloti Nagri",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_oldpersian": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldPersian-Regular.ttf",
+      "family": "Noto Sans OldPersian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "plantagenet_cherokee": {
+      "path": "/System/Library/Fonts/Supplemental/PlantagenetCherokee.ttf",
+      "family": "Plantagenet Cherokee",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_linear_a": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansLinearA-Regular.ttf",
+      "family": "Noto Sans Linear A",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "microsoft_sans_serif": {
+      "path": "/System/Library/Fonts/Supplemental/Microsoft Sans Serif.ttf",
+      "family": "Microsoft Sans Serif",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_cuneiform": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCuneiform-Regular.ttf",
+      "family": "Noto Sans Cuneiform",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_batak": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBatak-Regular.ttf",
+      "family": "Noto Sans Batak",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "arial_rounded_mt_bold": {
+      "path": "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf",
+      "family": "Arial Rounded MT Bold",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold"
+      ],
+      "source": "system"
+    },
+    "noto_sans_wancho": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansWancho-Regular.ttf",
+      "family": "Noto Sans Wancho",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "krungthep": {
+      "path": "/System/Library/Fonts/Supplemental/Krungthep.ttf",
+      "family": "Krungthep",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_oldsouarab": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldSouthArabian-Regular.ttf",
+      "family": "Noto Sans OldSouArab",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_paucinhau": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansPauCinHau-Regular.ttf",
+      "family": "Noto Sans PauCinHau",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_marchen": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMarchen-Regular.ttf",
+      "family": "Noto Sans Marchen",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_old_italic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldItalic-Regular.ttf",
+      "family": "Noto Sans Old Italic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic"
+      ],
+      "source": "system"
+    },
+    "noto_sans_gothic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansGothic-Regular.ttf",
+      "family": "Noto Sans Gothic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gurmukhi_mt": {
+      "path": "/System/Library/Fonts/Supplemental/Gurmukhi.ttf",
+      "family": "Gurmukhi MT",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "andale_mono": {
+      "path": "/System/Library/Fonts/Supplemental/Andale Mono.ttf",
+      "family": "Andale Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "mishafi_gold": {
+      "path": "/System/Library/Fonts/Supplemental/Mishafi Gold.ttf",
+      "family": "Mishafi Gold",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "herculanum": {
+      "path": "/System/Library/Fonts/Supplemental/Herculanum.ttf",
+      "family": "Herculanum",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tai_viet": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTaiViet-Regular.ttf",
+      "family": "Noto Sans Tai Viet",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_imparamaic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansImperialAramaic-Regular.ttf",
+      "family": "Noto Sans ImpAramaic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_brahmi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansBrahmi-Regular.ttf",
+      "family": "Noto Sans Brahmi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_coptic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCoptic-Regular.ttf",
+      "family": "Noto Sans Coptic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_old_turkic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldTurkic-Regular.ttf",
+      "family": "Noto Sans Old Turkic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_mongolian": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMongolian-Regular.ttf",
+      "family": "Noto Sans Mongolian",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_old_permic": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldPermic-Regular.ttf",
+      "family": "Noto Sans Old Permic",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tai_tham": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTaiTham-Regular.ttf",
+      "family": "Noto Sans Tai Tham",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_meeteimayek": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMeeteiMayek-Regular.ttf",
+      "family": "Noto Sans MeeteiMayek",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_oldnorarab": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOldNorthArabian-Regular.ttf",
+      "family": "Noto Sans OldNorArab",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_osmanya": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansOsmanya-Regular.ttf",
+      "family": "Noto Sans Osmanya",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "lastresort": {
+      "path": "/System/Library/Fonts/LastResort.otf",
+      "family": ".LastResort",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_canaborig": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansCanadianAboriginal-Regular.otf",
+      "family": "Noto Sans CanAborig",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixgeneral": {
+      "path": "/System/Library/Fonts/Supplemental/STIXGeneralItalic.otf",
+      "family": "STIXGeneral",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixintegralsupsm": {
+      "path": "/System/Library/Fonts/Supplemental/STIXIntUpSmReg.otf",
+      "family": "STIXIntegralsUpSm",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixintegralsupd": {
+      "path": "/System/Library/Fonts/Supplemental/STIXIntUpDBol.otf",
+      "family": "STIXIntegralsUpD",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixvariants": {
+      "path": "/System/Library/Fonts/Supplemental/STIXVar.otf",
+      "family": "STIXVariants",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixsizeonesym": {
+      "path": "/System/Library/Fonts/Supplemental/STIXSizOneSymBol.otf",
+      "family": "STIXSizeOneSym",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_javanese": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansJavanese-Regular.otf",
+      "family": "Noto Sans Javanese",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_gunjala_gondi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansGunjalaGondi-Regular.otf",
+      "family": "Noto Sans Gunjala Gondi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixnonunicode": {
+      "path": "/System/Library/Fonts/Supplemental/STIXNonUniBol.otf",
+      "family": "STIXNonUnicode",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_siddham": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansSiddham-Regular.otf",
+      "family": "Noto Sans Siddham",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stix_two_math": {
+      "path": "/System/Library/Fonts/Supplemental/STIXTwoMath.otf",
+      "family": "STIX Two Math",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixintegralsup": {
+      "path": "/System/Library/Fonts/Supplemental/STIXIntUpBol.otf",
+      "family": "STIXIntegralsUp",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_masaram_gondi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansMasaramGondi-Regular.otf",
+      "family": "Noto Sans Masaram Gondi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixsizethreesym": {
+      "path": "/System/Library/Fonts/Supplemental/STIXSizThreeSymBol.otf",
+      "family": "STIXSizeThreeSym",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_serif_yezidi": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSerifYezidi-Regular.otf",
+      "family": "Noto Serif Yezidi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixsizetwosym": {
+      "path": "/System/Library/Fonts/Supplemental/STIXSizTwoSymBol.otf",
+      "family": "STIXSizeTwoSym",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixintegralssm": {
+      "path": "/System/Library/Fonts/Supplemental/STIXIntSmReg.otf",
+      "family": "STIXIntegralsSm",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixsizefoursym": {
+      "path": "/System/Library/Fonts/Supplemental/STIXSizFourSymReg.otf",
+      "family": "STIXSizeFourSym",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixintegralsd": {
+      "path": "/System/Library/Fonts/Supplemental/STIXIntDReg.otf",
+      "family": "STIXIntegralsD",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "stixsizefivesym": {
+      "path": "/System/Library/Fonts/Supplemental/STIXSizFiveSymReg.otf",
+      "family": "STIXSizeFiveSym",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_tifinagh": {
+      "path": "/System/Library/Fonts/Supplemental/NotoSansTifinagh-Regular.otf",
+      "family": "Noto Sans Tifinagh",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "apple_sd_gothic_neo": {
+      "path": "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+      "family": "Apple SD Gothic Neo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "menlo": {
+      "path": "/System/Library/Fonts/Menlo.ttc",
+      "family": "Menlo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "heiti_tc": {
+      "path": "/System/Library/Fonts/STHeiti Medium.ttc",
+      "family": "Heiti TC",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "medium",
+        "light"
+      ],
+      "source": "system"
+    },
+    "hiragino_sans_gb": {
+      "path": "/System/Library/Fonts/Hiragino Sans GB.ttc",
+      "family": "Hiragino Sans GB",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_serif_myanmar_blk": {
+      "path": "/System/Library/Fonts/NotoSerifMyanmar.ttc",
+      "family": "Noto Serif Myanmar Blk",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "helvetica_neue": {
+      "path": "/System/Library/Fonts/HelveticaNeue.ttc",
+      "family": "Helvetica Neue",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "hiragino_sans": {
+      "path": "/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc",
+      "family": "Hiragino Sans",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noteworthy": {
+      "path": "/System/Library/Fonts/Noteworthy.ttc",
+      "family": "Noteworthy",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_oriya": {
+      "path": "/System/Library/Fonts/NotoSansOriya.ttc",
+      "family": "Noto Sans Oriya",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "thonburiui": {
+      "path": "/System/Library/Fonts/ThonburiUI.ttc",
+      "family": ".ThonburiUI",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "optima": {
+      "path": "/System/Library/Fonts/Optima.ttc",
+      "family": "Optima",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "avenir_next_condensed": {
+      "path": "/System/Library/Fonts/Avenir Next Condensed.ttc",
+      "family": "Avenir Next Condensed",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "lucida_grande": {
+      "path": "/System/Library/Fonts/LucidaGrande.ttc",
+      "family": "Lucida Grande",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "courier": {
+      "path": "/System/Library/Fonts/Courier.ttc",
+      "family": "Courier",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kohinoor_telugu": {
+      "path": "/System/Library/Fonts/KohinoorTelugu.ttc",
+      "family": "Kohinoor Telugu",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "muktamahee_regular": {
+      "path": "/System/Library/Fonts/MuktaMahee.ttc",
+      "family": "MuktaMahee Regular",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "avenir_book": {
+      "path": "/System/Library/Fonts/Avenir.ttc",
+      "family": "Avenir Book",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kohinoor_devanagari": {
+      "path": "/System/Library/Fonts/Kohinoor.ttc",
+      "family": "Kohinoor Devanagari",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_myanmar_blk": {
+      "path": "/System/Library/Fonts/NotoSansMyanmar.ttc",
+      "family": "Noto Sans Myanmar Blk",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "hiragino_mincho_pron": {
+      "path": "/System/Library/Fonts/ヒラギノ明朝 ProN.ttc",
+      "family": "Hiragino Mincho ProN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "avenir_next": {
+      "path": "/System/Library/Fonts/Avenir Next.ttc",
+      "family": "Avenir Next",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kohinoor_gujarati": {
+      "path": "/System/Library/Fonts/KohinoorGujarati.ttc",
+      "family": "Kohinoor Gujarati",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "aqua_kana": {
+      "path": "/System/Library/Fonts/AquaKana.ttc",
+      "family": ".Aqua Kana",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "palatino": {
+      "path": "/System/Library/Fonts/Palatino.ttc",
+      "family": "Palatino",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_nastaliq_urdu": {
+      "path": "/System/Library/Fonts/NotoNastaliq.ttc",
+      "family": "Noto Nastaliq Urdu",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "geeza_pro": {
+      "path": "/System/Library/Fonts/GeezaPro.ttc",
+      "family": "Geeza Pro",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "times": {
+      "path": "/System/Library/Fonts/Times.ttc",
+      "family": "Times",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_numeric": {
+      "path": "/System/Library/Fonts/ADTNumeric.ttc",
+      "family": ".SF Numeric",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "hiragino_maru_gothic_pro": {
+      "path": "/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc",
+      "family": "Hiragino Maru Gothic Pro",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_kannada_thin": {
+      "path": "/System/Library/Fonts/NotoSansKannada.ttc",
+      "family": "Noto Sans Kannada Thin",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "thin"
+      ],
+      "source": "system"
+    },
+    "cjk_symbols_fallback_hk": {
+      "path": "/System/Library/Fonts/CJKSymbolsFallback.ttc",
+      "family": ".CJK Symbols Fallback HK",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "decotype_nastaleeq_urdu_ui": {
+      "path": "/System/Library/Fonts/DecoTypeNastaleeqUrdu.ttc",
+      "family": ".DecoType Nastaleeq Urdu UI",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "marker_felt": {
+      "path": "/System/Library/Fonts/MarkerFelt.ttc",
+      "family": "Marker Felt",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sf_bangla": {
+      "path": "/System/Library/Fonts/SFIndia.ttc",
+      "family": ".SF Bangla",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "arial_hebrew": {
+      "path": "/System/Library/Fonts/ArialHB.ttc",
+      "family": "Arial Hebrew",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "apple_color_emoji": {
+      "path": "/System/Library/Fonts/Apple Color Emoji.ttc",
+      "family": "Apple Color Emoji",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "helvetica": {
+      "path": "/System/Library/Fonts/Helvetica.ttc",
+      "family": "Helvetica",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kohinoor_bangla": {
+      "path": "/System/Library/Fonts/KohinoorBangla.ttc",
+      "family": "Kohinoor Bangla",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "noto_sans_armenian_blk": {
+      "path": "/System/Library/Fonts/NotoSansArmenian.ttc",
+      "family": "Noto Sans Armenian Blk",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "al_bayan": {
+      "path": "/System/Library/Fonts/Supplemental/AlBayan.ttc",
+      "family": "Al Bayan",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "rockwell": {
+      "path": "/System/Library/Fonts/Supplemental/Rockwell.ttc",
+      "family": "Rockwell",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "savoye_let": {
+      "path": "/System/Library/Fonts/Supplemental/Savoye LET.ttc",
+      "family": "Savoye LET",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "pt_sans": {
+      "path": "/System/Library/Fonts/Supplemental/PTSans.ttc",
+      "family": "PT Sans",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sukhumvit_set": {
+      "path": "/System/Library/Fonts/Supplemental/SukhumvitSet.ttc",
+      "family": "Sukhumvit Set",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "nadeem": {
+      "path": "/System/Library/Fonts/Supplemental/Nadeem.ttc",
+      "family": "Nadeem",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kufistandardgk": {
+      "path": "/System/Library/Fonts/Supplemental/KufiStandardGK.ttc",
+      "family": "KufiStandardGK",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kannada_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Kannada Sangam MN.ttc",
+      "family": "Kannada Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "papyrus": {
+      "path": "/System/Library/Fonts/Supplemental/Papyrus.ttc",
+      "family": "Papyrus",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "seravek": {
+      "path": "/System/Library/Fonts/Supplemental/Seravek.ttc",
+      "family": "Seravek",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "iowan_old_style": {
+      "path": "/System/Library/Fonts/Supplemental/Iowan Old Style.ttc",
+      "family": "Iowan Old Style",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kailasa": {
+      "path": "/System/Library/Fonts/Supplemental/Kailasa.ttc",
+      "family": "Kailasa",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "charter": {
+      "path": "/System/Library/Fonts/Supplemental/Charter.ttc",
+      "family": "Charter",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "marion": {
+      "path": "/System/Library/Fonts/Supplemental/Marion.ttc",
+      "family": "Marion",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sinhala_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Sinhala MN.ttc",
+      "family": "Sinhala MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "corsiva_hebrew": {
+      "path": "/System/Library/Fonts/Supplemental/Corsiva.ttc",
+      "family": "Corsiva Hebrew",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "al_nile": {
+      "path": "/System/Library/Fonts/Supplemental/Al Nile.ttc",
+      "family": "Al Nile",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "superclarendon": {
+      "path": "/System/Library/Fonts/Supplemental/SuperClarendon.ttc",
+      "family": "Superclarendon",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "baghdad": {
+      "path": "/System/Library/Fonts/Supplemental/Baghdad.ttc",
+      "family": "Baghdad",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "athelas": {
+      "path": "/System/Library/Fonts/Supplemental/Athelas.ttc",
+      "family": "Athelas",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "american_typewriter": {
+      "path": "/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc",
+      "family": "American Typewriter",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "malayalam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Malayalam MN.ttc",
+      "family": "Malayalam MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "muna": {
+      "path": "/System/Library/Fonts/Supplemental/Muna.ttc",
+      "family": "Muna",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bodoni_72_oldstyle": {
+      "path": "/System/Library/Fonts/Supplemental/Bodoni 72 OS.ttc",
+      "family": "Bodoni 72 Oldstyle",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "myanmar_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Myanmar MN.ttc",
+      "family": "Myanmar MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "telugu_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Telugu MN.ttc",
+      "family": "Telugu MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "myanmar_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Myanmar Sangam MN.ttc",
+      "family": "Myanmar Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "devanagari_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc",
+      "family": "Devanagari Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "phosphate": {
+      "path": "/System/Library/Fonts/Supplemental/Phosphate.ttc",
+      "family": "Phosphate",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "futura": {
+      "path": "/System/Library/Fonts/Supplemental/Futura.ttc",
+      "family": "Futura",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "copperplate": {
+      "path": "/System/Library/Fonts/Supplemental/Copperplate.ttc",
+      "family": "Copperplate",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "pt_mono": {
+      "path": "/System/Library/Fonts/Supplemental/PTMono.ttc",
+      "family": "PT Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "thonburi": {
+      "path": "/System/Library/Fonts/Supplemental/Thonburi.ttc",
+      "family": "Thonburi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "farah": {
+      "path": "/System/Library/Fonts/Supplemental/Farah.ttc",
+      "family": "Farah",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "malayalam_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc",
+      "family": "Malayalam Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "chalkboard_se": {
+      "path": "/System/Library/Fonts/Supplemental/ChalkboardSE.ttc",
+      "family": "Chalkboard SE",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "itf_devanagari": {
+      "path": "/System/Library/Fonts/Supplemental/ITFDevanagari.ttc",
+      "family": "ITF Devanagari",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bangla_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Bangla MN.ttc",
+      "family": "Bangla MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bangla_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc",
+      "family": "Bangla Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "tamil_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Tamil MN.ttc",
+      "family": "Tamil MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gurmukhi_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Gurmukhi Sangam MN.ttc",
+      "family": "Gurmukhi Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gujarati_mt": {
+      "path": "/System/Library/Fonts/Supplemental/GujaratiMT.ttc",
+      "family": "Gujarati MT",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "diwan_kufi": {
+      "path": "/System/Library/Fonts/Supplemental/Diwan Kufi.ttc",
+      "family": "Diwan Kufi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "tamil_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc",
+      "family": "Tamil Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "cochin": {
+      "path": "/System/Library/Fonts/Supplemental/Cochin.ttc",
+      "family": "Cochin",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "devanagari_mt": {
+      "path": "/System/Library/Fonts/Supplemental/DevanagariMT.ttc",
+      "family": "Devanagari MT",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "kannada_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Kannada MN.ttc",
+      "family": "Kannada MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "beirut": {
+      "path": "/System/Library/Fonts/Supplemental/Beirut.ttc",
+      "family": "Beirut",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "new_peninim_mt": {
+      "path": "/System/Library/Fonts/Supplemental/NewPeninimMT.ttc",
+      "family": "New Peninim MT",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gurmukhi_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Gurmukhi MN.ttc",
+      "family": "Gurmukhi MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sinhala_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc",
+      "family": "Sinhala Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "pt_serif": {
+      "path": "/System/Library/Fonts/Supplemental/PTSerif.ttc",
+      "family": "PT Serif",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "snell_roundhand": {
+      "path": "/System/Library/Fonts/Supplemental/SnellRoundhand.ttc",
+      "family": "Snell Roundhand",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "chalkboard": {
+      "path": "/System/Library/Fonts/Supplemental/Chalkboard.ttc",
+      "family": "Chalkboard",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "bodoni_72": {
+      "path": "/System/Library/Fonts/Supplemental/Bodoni 72.ttc",
+      "family": "Bodoni 72",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "mshtakan": {
+      "path": "/System/Library/Fonts/Supplemental/Mshtakan.ttc",
+      "family": "Mshtakan",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "lao_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Lao MN.ttc",
+      "family": "Lao MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "sana": {
+      "path": "/System/Library/Fonts/Supplemental/Sana.ttc",
+      "family": "Sana",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "baskerville": {
+      "path": "/System/Library/Fonts/Supplemental/Baskerville.ttc",
+      "family": "Baskerville",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "inaimathi": {
+      "path": "/System/Library/Fonts/Supplemental/InaiMathi-MN.ttc",
+      "family": "InaiMathi",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "telugu_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Telugu Sangam MN.ttc",
+      "family": "Telugu Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "hoefler_text": {
+      "path": "/System/Library/Fonts/Supplemental/Hoefler Text.ttc",
+      "family": "Hoefler Text",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gujarati_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Gujarati Sangam MN.ttc",
+      "family": "Gujarati Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "galvji": {
+      "path": "/System/Library/Fonts/Supplemental/Galvji.ttc",
+      "family": "Galvji",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "euphemia_ucas": {
+      "path": "/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc",
+      "family": "Euphemia UCAS",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "didot": {
+      "path": "/System/Library/Fonts/Supplemental/Didot.ttc",
+      "family": "Didot",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "khmer_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Khmer MN.ttc",
+      "family": "Khmer MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "oriya_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Oriya MN.ttc",
+      "family": "Oriya MN",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "al_tarikh": {
+      "path": "/System/Library/Fonts/Supplemental/Al Tarikh.ttc",
+      "family": "Al Tarikh",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "raanana": {
+      "path": "/System/Library/Fonts/Supplemental/Raanana.ttc",
+      "family": "Raanana",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "gill_sans": {
+      "path": "/System/Library/Fonts/Supplemental/GillSans.ttc",
+      "family": "Gill Sans",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "damascus": {
+      "path": "/System/Library/Fonts/Supplemental/Damascus.ttc",
+      "family": "Damascus",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "waseem": {
+      "path": "/System/Library/Fonts/Supplemental/Waseem.ttc",
+      "family": "Waseem",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "pt_serif_caption": {
+      "path": "/System/Library/Fonts/Supplemental/PTSerifCaption.ttc",
+      "family": "PT Serif Caption",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "signpainter_housescript": {
+      "path": "/System/Library/Fonts/Supplemental/SignPainter.ttc",
+      "family": "SignPainter-HouseScript",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "oriya_sangam_mn": {
+      "path": "/System/Library/Fonts/Supplemental/Oriya Sangam MN.ttc",
+      "family": "Oriya Sangam MN",
+      "language": [
+        "bn"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "shree_devanagari_714": {
+      "path": "/System/Library/Fonts/Supplemental/Shree714.ttc",
+      "family": "Shree Devanagari 714",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "songti_sc": {
+      "path": "/System/Library/Fonts/Supplemental/Songti.ttc",
+      "family": "Songti SC",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "decotype_naskh": {
+      "path": "/System/Library/Fonts/Supplemental/DecoTypeNaskh.ttc",
+      "family": "DecoType Naskh",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgsdz_nerd_font": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGSDZNerdFont-Regular.ttf",
+      "family": "MesloLGSDZ Nerd Font",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "bold",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgl_nerd_font": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGLNerdFont-Bold.ttf",
+      "family": "MesloLGL Nerd Font",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgmdz_nerd_font_propo": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGMDZNerdFontPropo-Regular.ttf",
+      "family": "MesloLGMDZ Nerd Font Propo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic",
+        "bold"
+      ],
+      "source": "system"
+    },
+    "meslolgm_nerd_font_mono": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGMNerdFontMono-Bold.ttf",
+      "family": "MesloLGM Nerd Font Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgldz_nerd_font": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGLDZNerdFont-BoldItalic.ttf",
+      "family": "MesloLGLDZ Nerd Font",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgmdz_nerd_font_mono": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGMDZNerdFontMono-Italic.ttf",
+      "family": "MesloLGMDZ Nerd Font Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "bold",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgs_nerd_font_propo": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGSNerdFontPropo-Bold.ttf",
+      "family": "MesloLGS Nerd Font Propo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgs_nerd_font": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGSNerdFont-Bold.ttf",
+      "family": "MesloLGS Nerd Font",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgm_nerd_font": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGMNerdFont-BoldItalic.ttf",
+      "family": "MesloLGM Nerd Font",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgs_nerd_font_mono": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGSNerdFontMono-Bold.ttf",
+      "family": "MesloLGS Nerd Font Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgl_nerd_font_mono": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGLNerdFontMono-Italic.ttf",
+      "family": "MesloLGL Nerd Font Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "bold",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgl_nerd_font_propo": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGLNerdFontPropo-Regular.ttf",
+      "family": "MesloLGL Nerd Font Propo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "italic",
+        "bold"
+      ],
+      "source": "system"
+    },
+    "meslolgldz_nerd_font_propo": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGLDZNerdFontPropo-BoldItalic.ttf",
+      "family": "MesloLGLDZ Nerd Font Propo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgldz_nerd_font_mono": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGLDZNerdFontMono-Bold.ttf",
+      "family": "MesloLGLDZ Nerd Font Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgm_nerd_font_propo": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGMNerdFontPropo-Regular.ttf",
+      "family": "MesloLGM Nerd Font Propo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "regular",
+        "bold",
+        "italic"
+      ],
+      "source": "system"
+    },
+    "meslolgsdz_nerd_font_propo": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGSDZNerdFontPropo-Italic.ttf",
+      "family": "MesloLGSDZ Nerd Font Propo",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "italic",
+        "regular",
+        "bold"
+      ],
+      "source": "system"
+    },
+    "meslolgmdz_nerd_font": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGMDZNerdFont-BoldItalic.ttf",
+      "family": "MesloLGMDZ Nerd Font",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "italic",
+        "regular"
+      ],
+      "source": "system"
+    },
+    "meslolgsdz_nerd_font_mono": {
+      "path": "/Users/simanto/Library/Fonts/MesloLGSDZNerdFontMono-Bold.ttf",
+      "family": "MesloLGSDZ Nerd Font Mono",
+      "language": [
+        "en"
+      ],
+      "weights": [
+        "bold",
+        "regular",
+        "italic"
+      ],
+      "source": "system"
+    }
+  }
+}
