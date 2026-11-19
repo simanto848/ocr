@@ -2,7 +2,7 @@
 
 ## 1. Current architecture
 ```
-/Volumes/SSD-SIMANTO/works/ocr
+<repo-root>
 ├── .venv/                 # all packages (torch 2.14, transformers 4.46.3, doctr, opencv)
 ├── .cache/                # HF_HOME, DOCTR_CACHE_DIR, pip, torch — all external
 ├── src/

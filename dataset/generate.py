@@ -23,7 +23,7 @@ def _root():
     global ROOT
     if ROOT is None:
         import os
-        ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+        ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1])))
     return ROOT
 
 def load_yaml(p):

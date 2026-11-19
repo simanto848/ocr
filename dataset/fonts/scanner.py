@@ -3,7 +3,7 @@ from __future__ import annotations
 import os, json
 from pathlib import Path
 
-ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[2])))
 FONTS_DIR = Path(os.environ.get("FONTS_DIR", str(ROOT / "fonts")))
 SYSTEM_DIRS = ["/System/Library/Fonts", "/System/Library/Fonts/Supplemental",
                "/Library/Fonts", str(Path.home() / "Library" / "Fonts")]

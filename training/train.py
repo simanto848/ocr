@@ -16,7 +16,7 @@ while not (_r / "src" / "env_bootstrap.py").exists():
 _sys.path.insert(0, str(_r / "src"))
 import env_bootstrap  # noqa: F401,E402  (pins all caches to external drive)
 
-ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1])))
 
 def load_cfg(p):
     return yaml.safe_load(Path(p).read_text()) if p and Path(p).exists() else {}

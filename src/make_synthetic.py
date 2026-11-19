@@ -45,5 +45,5 @@ def make_synthetic(out_dir: str, n: int = 500, seed: int = 42):
     return str(out / "labels.tsv")
 
 if __name__ == "__main__":
-    root = os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr")
+    root = os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1]))
     make_synthetic(f"{root}/data/synthetic", n=1000)

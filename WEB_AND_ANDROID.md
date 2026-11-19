@@ -15,7 +15,7 @@ need a GPU or a fine-tuned checkpoint.
 ## ⚡ One-command startup
 
 ```bash
-cd /Volumes/SSD-SIMANTO/works/ocr
+cd ocr
 ./start.sh                 # starts VLM + web app; Ctrl+C stops both
 ./start.sh --detach        # starts both in background and returns
 ./start.sh --no-vlm        # web app only (Tesseract engine)
@@ -46,7 +46,7 @@ VLM service alongside the web server.
 
 ### Set up the VLM service (one time)
 ```bash
-cd /Volumes/SSD-SIMANTO/works/ocr
+cd ocr
 python3.11 -m venv .venv-paddle
 .venv-paddle/bin/python -m pip install paddlepaddle==3.2.1 \
   -i https://www.paddlepaddle.org.cn/packages/stable/cpu/
@@ -73,7 +73,7 @@ remains available as a fast fallback.
 ## 1. Web app
 
 ```bash
-cd /Volumes/SSD-SIMANTO/works/ocr
+cd ocr
 source ./env.sh
 ./web/run.sh                       # local: http://127.0.0.1:8000
 ./web/run.sh 8000 0.0.0.0          # also reachable from your phone on the same Wi-Fi
@@ -117,7 +117,7 @@ Located in `ocr_app/`. Two modes:
 ### Build & install
 
 ```bash
-cd /Volumes/SSD-SIMANTO/works/ocr/ocr_app
+cd ocr/ocr_app
 flutter pub get
 flutter build apk --debug            # or: flutter build apk --release
 # APK: build/app/outputs/flutter-apk/app-debug.apk

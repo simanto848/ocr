@@ -1,6 +1,11 @@
 # Source this file: source ./env.sh
-# Forces EVERYTHING onto the external drive: /Volumes/SSD-SIMANTO/works/ocr
-export OCR_ROOT="/Volumes/SSD-SIMANTO/works/ocr"
+# Derive the repo root from this script's own location (works for any clone
+# on any drive). All caches then stay inside the checked-out repository.
+if [ -n "${ZSH_VERSION:-}" ]; then
+  export OCR_ROOT="${${(%):-%x}:A:h}"
+else
+  export OCR_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+fi
 export VIRTUAL_ENV="$OCR_ROOT/.venv"
 export PATH="$OCR_ROOT/.venv/bin:$PATH"
 

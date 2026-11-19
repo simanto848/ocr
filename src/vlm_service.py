@@ -2,7 +2,7 @@
 
 Runs in .venv-paddle (PaddlePaddle stack isolated from the training venv):
 
-    cd /Volumes/SSD-SIMANTO/works/ocr
+    cd <repo>
     PADDLE_PDX_CACHE_HOME=$PWD/.cache/paddlex \
       .venv-paddle/bin/python -u src/vlm_service.py --port 8090
 

@@ -4,7 +4,7 @@ import json, os
 from pathlib import Path
 from dataclasses import dataclass, field
 
-ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[2])))
 FONTS_DIR = Path(os.environ.get("FONTS_DIR", str(ROOT / "fonts")))
 REGISTRY_JSON = FONTS_DIR / "registry.json"
 

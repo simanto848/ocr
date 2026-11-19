@@ -10,7 +10,7 @@ def get_detector(det_arch: str = "db_mobilenet_v3_large", pretrained: bool = Tru
     if _detector is not None:
         return _detector
     import os
-    if not os.environ.get("DOCTR_CACHE_DIR", "").startswith(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr")):
+    if not os.environ.get("DOCTR_CACHE_DIR", "").startswith(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1]))):
         raise RuntimeError("DOCTR_CACHE_DIR must point inside OCR_ROOT (source ./env.sh) — refusing to download to internal disk")
     from doctr.models import detection_predictor
     _detector = detection_predictor(

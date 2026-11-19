@@ -16,7 +16,7 @@ import env_bootstrap  # noqa: F401,E402  (pins all caches to external drive)
 import torch
 from PIL import Image
 
-ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1])))
 
 def main():
     ap = argparse.ArgumentParser()

@@ -3,7 +3,7 @@ import env_bootstrap  # noqa: F401  (must be first: pins all caches to external 
 import os
 from pathlib import Path
 
-ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1])))
 DATA_RAW = ROOT / "data" / "raw"
 DATA_PROCESSED = ROOT / "data" / "processed"
 DATA_SYNTHETIC = ROOT / "data" / "synthetic"

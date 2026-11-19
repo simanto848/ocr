@@ -11,7 +11,7 @@ Multilingual document text extraction with two modes:
 ## Start the server first (for Server mode)
 
 ```bash
-cd /Volumes/SSD-SIMANTO/works/ocr
+cd ocr
 ./web/run.sh 8000 0.0.0.0
 ```
 

@@ -40,7 +40,7 @@ This repository contains two things:
 ## Quick start
 
 ```bash
-cd /Volumes/SSD-SIMANTO/works/ocr
+cd ocr
 
 # 1. Install Python dependencies (once)
 source ./env.sh
@@ -59,7 +59,7 @@ That's it. The launcher waits for the VLM to load before starting the web app, s
 immediately shows **“PaddleOCR-VL ready”**.
 
 For the Android app: `WEB_HOST=0.0.0.0 ./start.sh`, then set the app's server address to your
-computer's LAN IP (e.g. `http://192.168.0.102:8000`).
+computer's LAN IP (e.g. `http://<your-computer-ip>:8000`).
 
 ---
 
@@ -111,7 +111,7 @@ localhost HTTP API (`src/vlm_service.py`). If it is not running, the web app tra
 back to Tesseract — nothing breaks.
 
 All caches, models, virtualenvs and uploaded files live on the external drive
-(`/Volumes/SSD-SIMANTO/works/ocr`) and are **not** committed to Git.
+(`<repo-root>`) and are **not** committed to Git.
 
 ---
 
@@ -122,7 +122,7 @@ All caches, models, virtualenvs and uploaded files live on the external drive
 - ~8 GB RAM for the VLM (~5 GB resident), ~120 GB disk for caches/models.
 
 ### Software
-- macOS with Python 3.11 (here: `/Users/simanto/.local/bin/python3.11` via uv).
+- macOS with Python 3.11 (here: `python3.11` via uv).
 - Tesseract 5 with `eng`, `ben`, `hin` language data:
   ```bash
   brew install tesseract tesseract-lang

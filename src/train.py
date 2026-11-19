@@ -19,7 +19,7 @@ def get_device():
     return "cpu"
 
 def train(args):
-    root = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+    root = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1])))
     cfg = TRAIN_CONFIG.copy()
     if args.output_dir: cfg["output_dir"] = args.output_dir
     if args.steps: cfg["max_steps"] = args.steps

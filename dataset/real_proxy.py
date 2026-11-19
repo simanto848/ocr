@@ -17,7 +17,7 @@ while not (_r / "src" / "env_bootstrap.py").exists():
     _r = _r.parent
 _sys.path.insert(0, str(_r / "src"))
 import env_bootstrap  # noqa: F401,E402  (pins all caches to external drive)
-ROOT = Path(os.environ.get("OCR_ROOT", "/Volumes/SSD-SIMANTO/works/ocr"))
+ROOT = Path(os.environ.get("OCR_ROOT", str(Path(__file__).resolve().parents[1])))
 
 HEAVY = {"blur_p": 0.6, "noise_p": 0.7, "jpeg_p": 0.6, "perspective_p": 0.8,
          "lighting_p": 0.6, "rotation_max": 7}
