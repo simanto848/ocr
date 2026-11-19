@@ -1,0 +1,24 @@
+# All packages install into .venv/ (on external drive).
+# All caches redirected via env.sh to .cache/ (on external drive).
+torch>=2.4.0
+torchvision>=0.19.0
+transformers==4.46.3
+datasets>=3.0.0
+fsspec==2026.6.0
+accelerate>=0.34.0
+pillow>=10.0.0
+opencv-python>=4.8.0
+numpy==1.26.4
+jiwer>=3.0.0
+rapidfuzz>=3.0.0
+tqdm>=4.66.0
+matplotlib>=3.8.0
+huggingface_hub>=0.24.0
+sentencepiece>=0.2.0
+python-doctr>=0.8.0
+onnxruntime>=1.18.0
+fonttools>=4.0.0
+pyyaml>=6.0
+peft>=0.10.0
+playwright>=1.40.0
+pytest>=8.0.0
