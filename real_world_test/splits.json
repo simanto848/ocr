@@ -1,0 +1,18 @@
+{
+ "train": [],
+ "val": [],
+ "test": [
+  "realproxy_000",
+  "realproxy_001",
+  "realproxy_002",
+  "realproxy_003",
+  "realproxy_004",
+  "realproxy_005",
+  "realproxy_006",
+  "realproxy_007",
+  "realproxy_008",
+  "realproxy_009",
+  "realproxy_010",
+  "realproxy_011"
+ ]
+}

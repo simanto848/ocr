@@ -1,0 +1,1 @@
+{"id": "realproxy_000", "proxy": true, "language": "bn", "fonts": ["hind_siliguri", "noto_sans_bengali", "noto_serif_bengali"], "document_type": "legal", "resolution": 150, "augmentation": {"rotation": 1.49, "perspective": true, "blur": 3, "lighting": true}, "difficulty": 0.9}

@@ -1,0 +1,1 @@
+{"id": "realproxy_009", "proxy": true, "language": "bn-en", "fonts": ["inter", "noto_sans_bengali", "noto_serif_bengali"], "document_type": "invoice", "resolution": 150, "augmentation": {"rotation": -2.24, "perspective": true, "blur": 3, "noise": 7.4, "lighting": true, "jpeg_quality": 56}, "difficulty": 0.9}

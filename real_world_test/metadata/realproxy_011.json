@@ -1,0 +1,1 @@
+{"id": "realproxy_011", "proxy": true, "language": "bn-en", "fonts": ["inter", "noto_sans_bengali", "noto_serif_bengali"], "document_type": "gov_form", "resolution": 150, "augmentation": {"rotation": -2.02, "perspective": true, "noise": 4.3}, "difficulty": 0.9}

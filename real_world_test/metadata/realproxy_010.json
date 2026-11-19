@@ -1,0 +1,1 @@
+{"id": "realproxy_010", "proxy": true, "language": "en", "fonts": ["inter"], "document_type": "receipt", "resolution": 150, "augmentation": {"rotation": -1.69, "perspective": true, "blur": 5, "noise": 7.6, "lighting": true, "jpeg_quality": 90}, "difficulty": 0.9}
