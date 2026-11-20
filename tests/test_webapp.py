@@ -317,3 +317,17 @@ def test_page_image_endpoint(server):
     assert r.headers["Content-Type"] == "image/png"
     assert requests.get(base + "/api/page-image",
                         params={"job": "../jobs", "page": 1}, timeout=5).status_code == 404
+
+
+def test_mcq_rename_updates_manifest_and_exports(server):
+    base, jobs = server
+    jid = _make_done_job(jobs)
+    requests.post(base + "/api/mcq/build", json={"job_id": jid}, timeout=10)
+    r = requests.post(base + "/api/mcq/rename", json={
+        "job_id": jid, "name": "Biology MCQs"}, timeout=5)
+    assert r.status_code == 200
+    assert r.json()["manifest"]["name"] == "Biology MCQs"
+    root = jobs / jid / "mcq"
+    assert json.loads((root / "manifest.json").read_text())["name"] == "Biology MCQs"
+    assert (root / "mcq.md").read_text().startswith("# Biology MCQs")
+    assert "Biology MCQs" in (root / "dataset_card.md").read_text()

@@ -350,7 +350,11 @@
     <div id="mcqWork" hidden>
       <header class="mcq-head">
         <div class="mcq-head-info">
-          <h2 id="mcqTitle">—</h2>
+          <div class="mcq-title-row">
+            <h2 id="mcqTitle">—</h2>
+            <button id="mcqEditName" class="mcq-btn" type="button" title="Rename dataset" aria-label="Rename dataset">✎</button>
+          </div>
+          <input id="mcqNameInput" class="input" hidden maxlength="120" aria-label="Dataset name">
           <p id="mcqSub">—</p>
         </div>
         <div class="mcq-export">

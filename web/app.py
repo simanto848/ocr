@@ -598,6 +598,22 @@ class Handler(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         if u.path.startswith("/api/") and (not self._authorized() or not self._csrf_ok()):
             return self._json({"error": "unauthorized"}, 401)
+        if u.path == "/api/mcq/rename":
+            import mcq as mcq_mod
+            body = self._read_json() or {}
+            jdir = _job_dir(str(body.get("job_id") or ""))
+            if jdir is None or not (jdir / "mcq" / "manifest.json").is_file():
+                return self._json({"error": "no dataset for this job"}, 404)
+            root = jdir / "mcq"
+            bundle = _load_mcq(root)
+            name = str(body.get("name") or "").strip()[:120] or "MCQ dataset"
+            bundle["manifest"]["name"] = name
+            for fmt in ("md", "card"):
+                filename, fn = mcq_mod.FORMATS[fmt]
+                (root / filename).write_text(fn(bundle["items"], name=name), encoding="utf-8")
+            _atomic_write(root / "manifest.json",
+                          json.dumps(bundle["manifest"], ensure_ascii=False, indent=2))
+            return self._json({"manifest": bundle["manifest"]})
         if u.path == "/api/mcq/build":
             return self._mcq_build()
         if u.path == "/api/ai/models":

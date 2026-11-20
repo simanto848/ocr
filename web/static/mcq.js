@@ -652,6 +652,28 @@
     }
   }
 
+  async function commitDatasetName() {
+    const input = $("mcqNameInput");
+    const name = input.value.trim();
+    const original = M.ds?.manifest?.name || "";
+    input.hidden = true;
+    $("mcqTitle").hidden = false;
+    $("mcqEditName").hidden = false;
+    if (!name || name === original || !M.jobId) return;
+    try {
+      const r = await mApi("/api/mcq/rename", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ job_id: M.jobId, name }),
+      });
+      if (M.ds) M.ds.manifest.name = r.manifest.name;
+      $("mcqTitle").textContent = r.manifest.name;
+      toastMsg("Dataset renamed", "ok");
+    } catch (e) {
+      $("mcqTitle").textContent = original;
+      toastMsg(`Rename failed: ${e.message}`, "err");
+    }
+  }
+
   async function addCustomProvider() {
     const body = {
       name: $("aiNewName").value.trim(),
@@ -758,6 +780,26 @@
       M.search = e.target.value;
       renderList();
     };
+
+    $("mcqEditName").onclick = () => {
+      if (!M.ds || !M.jobId) return;
+      const input = $("mcqNameInput");
+      input.value = M.ds.manifest?.name || "";
+      input.dataset.original = input.value;
+      input.hidden = false;
+      $("mcqTitle").hidden = true;
+      $("mcqEditName").hidden = true;
+      input.focus(); input.select();
+    };
+    $("mcqNameInput").onkeydown = (e) => {
+      if (e.key === "Enter") { e.preventDefault(); commitDatasetName(); }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        $("mcqNameInput").value = $("mcqNameInput").dataset.original || "";
+        commitDatasetName();
+      }
+    };
+    $("mcqNameInput").onblur = commitDatasetName;
 
     $("mcqDlZip").onclick = () => download("zip");
     $("mcqRebuild").onclick = async () => {
