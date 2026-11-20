@@ -44,7 +44,24 @@ class Document:
                 "meta": self.meta}
 
     def full_text(self):
-        return "\n".join(e.text for p in self.pages for e in p.elements if e.text)
+        """Ground-truth text in reading order.
+
+        Tables have empty `text` but their rows ARE rendered on the page — leaving
+        them out taught the recogniser to omit every invoice line item. Serialise
+        each row as "a | b | c" while keeping the structured `meta.rows` intact.
+        """
+        out = []
+        for p in self.pages:
+            for e in p.elements:
+                if e.type == "table":
+                    cols = e.meta.get("columns", [])
+                    for row in e.meta.get("rows", []):
+                        line = " | ".join(str(row.get(c, "")) for c in cols if row.get(c, "") != "")
+                        if line.strip():
+                            out.append(line)
+                elif e.text:
+                    out.append(e.text)
+        return "\n".join(out)
 
 def new_doc(doc_type, language, seed=0):
     return Document(document_id=f"doc_{seed:06d}", language=language,

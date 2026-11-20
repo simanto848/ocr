@@ -1,32 +1,20 @@
 {
   "fonts": {
-    "inter": {
-      "path": "fonts/english/Inter.ttf",
-      "family": "Inter",
+    "hindsiliguri_bold": {
+      "path": "fonts/bengali/HindSiliguri-Bold.ttf",
+      "family": "HindSiliguri-Bold",
       "language": [
+        "bn",
         "en"
       ],
       "weights": [
-        "regular"
-      ],
-      "source": "bundled"
-    },
-    "hind_siliguri": {
-      "path": "fonts/bengali/HindSiliguri-Medium.ttf",
-      "family": "Hind Siliguri",
-      "language": [
-        "bn"
-      ],
-      "weights": [
-        "medium",
-        "regular",
         "bold"
       ],
       "source": "bundled"
     },
-    "noto_sans_bengali": {
-      "path": "fonts/bengali/NotoSansBengali.ttf",
-      "family": "Noto Sans Bengali",
+    "hindsiliguri_medium": {
+      "path": "fonts/bengali/HindSiliguri-Medium.ttf",
+      "family": "HindSiliguri-Medium",
       "language": [
         "bn",
         "en"
@@ -36,11 +24,46 @@
       ],
       "source": "bundled"
     },
-    "noto_serif_bengali": {
-      "path": "fonts/bengali/NotoSerifBengali.ttf",
-      "family": "Noto Serif Bengali",
+    "hindsiliguri_regular": {
+      "path": "fonts/bengali/HindSiliguri-Regular.ttf",
+      "family": "HindSiliguri-Regular",
       "language": [
         "bn",
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "bundled"
+    },
+    "notosansbengali": {
+      "path": "fonts/bengali/NotoSansBengali.ttf",
+      "family": "NotoSansBengali",
+      "language": [
+        "bn",
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "bundled"
+    },
+    "notoserifbengali": {
+      "path": "fonts/bengali/NotoSerifBengali.ttf",
+      "family": "NotoSerifBengali",
+      "language": [
+        "bn",
+        "en"
+      ],
+      "weights": [
+        "regular"
+      ],
+      "source": "bundled"
+    },
+    "inter": {
+      "path": "fonts/english/Inter.ttf",
+      "family": "Inter",
+      "language": [
         "en"
       ],
       "weights": [

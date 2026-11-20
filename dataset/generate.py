@@ -71,6 +71,7 @@ def main():
     from dataset.fonts.selector import FontSelector
     from dataset.templates.documents import build, DOC_TYPES
     from dataset.rendering.pillow_renderer import PillowRenderer
+    from dataset.rendering.html_renderer import render as html_render
     from dataset.augmentation.degrader import DocumentDegrader
     from dataset.validation.statistics import difficulty_score
     from dataset.validation.validator import validate_sample
@@ -81,7 +82,24 @@ def main():
         scan()
         reg = FontRegistry()
     sel = FontSelector(reg, seed=seed)
-    renderer = PillowRenderer(reg, sel, dpi=dpi)
+    pillow = PillowRenderer(reg, sel, dpi=dpi)
+    # Pillow without libraqm mis-shapes Bengali conjuncts. Chromium shapes Indic
+    # correctly AND exports word boxes via DOM ranges, so prefer it whenever
+    # raqm is missing. The choice is recorded per sample in its metadata.
+    from PIL import features as _pil_features
+    raqm = _pil_features.check("raqm")
+    use_html = (not raqm)
+    renderer_name = "html-chromium" if use_html else "pillow-ttf"
+    if use_html:
+        probe = html_render(build("plain", "bn", seed), dpi=dpi)
+        if probe is None:
+            use_html = False
+            renderer_name = "pillow-ttf"
+            print("WARN: raqm missing and Chromium unavailable — falling back to "
+                  "Pillow (Bengali shaping may be imperfect). "
+                  "Install Playwright's chromium or libraqm for correct output.")
+    elif raqm:
+        print("raqm available: Pillow renderer will shape Indic text correctly.")
 
     imgdir, anndir, metadir = out / "images", out / "annotations", out / "metadata"
     for d_ in (imgdir, anndir, metadir):
@@ -95,7 +113,12 @@ def main():
         lang = rng.choices(langs, weights=lang_w)[0]
         typ = rng.choices(types, weights=type_w)[0]
         doc = build(typ, lang, seed * 100000 + i)
-        img_pil, ann = renderer.render(doc, seed=seed + i)
+        rendered = html_render(doc, seed=seed + i, dpi=dpi) if use_html else None
+        if rendered is not None:
+            img_pil, ann = rendered
+        else:
+            img_pil, ann = pillow.render(doc, seed=seed + i)
+            ann["meta"]["renderer"] = "pillow-ttf"
         import numpy as np
         img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
         boxes = [w["bbox"] for w in ann["words"]]
@@ -115,7 +138,8 @@ def main():
              "document": doc.to_dict()}, ensure_ascii=False, indent=1))
         m = {"id": doc.document_id, "language": lang, "fonts": ann["meta"]["fonts"],
              "document_type": typ, "resolution": dpi, "augmentation": applied,
-             "tier": tier, "difficulty": diff, "fallbacks": ann["meta"].get("fallbacks", [])}
+             "tier": tier, "difficulty": diff, "fallbacks": ann["meta"].get("fallbacks", []),
+             "renderer": ann["meta"].get("renderer", renderer_name)}
         (metadir / f"{doc.document_id}.json").write_text(json.dumps(m, ensure_ascii=False, indent=1))
         valid, errs = validate_sample(imgdir / name, ann)
         if not valid:
