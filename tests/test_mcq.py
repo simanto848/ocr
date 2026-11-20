@@ -355,3 +355,32 @@ def test_question_after_short_option_is_still_a_new_question():
     r = mcq.parse_text(text)
     assert len(r["items"]) == 2
     assert r["items"][1]["question"] == "Another question with a question mark?"
+
+
+def test_attach_boxes_links_questions_to_source_lines():
+    pages = [{
+        "page": 1,
+        "text": "1. What is the capital of France?\nA) Berlin\nB) Paris",
+        "boxes": [
+            {"box": [10, 20, 400, 45], "text": "1. What is the capital of France?"},
+            {"box": [10, 55, 200, 75], "text": "A) Berlin"},
+            {"box": [10, 85, 200, 105], "text": "B) Paris"},
+        ],
+        "image_size": [800, 1100],
+        "source": "ocr",
+    }]
+    items = mcq.parse_pages(pages)["items"]
+    assert len(items) == 1
+    mcq.attach_boxes(items, pages)
+    src = items[0]["source"]
+    assert src["bbox"] == [10, 20, 400, 45]
+    assert src["line"] == 0
+    assert src["image_size"] == [800, 1100]
+    assert "capital" in src["box_text"]
+
+
+def test_attach_boxes_noop_without_boxes():
+    pages = [{"page": 1, "text": "1. Question?\nA) one\nB) two", "boxes": []}]
+    items = mcq.parse_pages(pages)["items"]
+    mcq.attach_boxes(items, pages)
+    assert "bbox" not in items[0]["source"]

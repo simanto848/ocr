@@ -235,6 +235,13 @@ any additional OpenAI-compatible, Ollama-style or OpenCode-style endpoint. API k
 stored server-side in `outputs/web/ai_providers.json` and never returned to the browser.
 Use **↻ Models** to refresh the model list and **Test connection** to verify credentials.
 
+- **Source linking** — each extracted question carries the OCR line box it came from.
+  In the **Extract text** panel, hovering an extracted line highlights the matching
+  region of the page image and hovering an image region highlights the text; the
+  MCQ card's **📍 Source** button jumps straight to its question in the original page.
+  The MCQ panel also supports **↻ Rebuild** with a different method/model and deleting
+  a set from its history.
+
 Datasets live in `outputs/web/jobs/<job_id>/mcq/`, next to the page renders they came from.
 
 CLI equivalent (works on an existing extraction result, no server needed):
@@ -297,6 +304,7 @@ VLM whenever the service is up.
 | `GET /api/history` | All jobs, newest first |
 | `GET /api/job?id=…` | Status, progress, pages, markdown, result JSON |
 | `GET /api/preview?job=…&page=N` | Page image |
+| `GET /api/page-image?job=…&page=N` | Full-resolution page render (OCR box coordinate space) |
 | `GET /api/download?job=…&format=md\|txt\|json` | Download |
 | `POST /api/delete?id=…` / `DELETE /api/job?id=…` | Delete a job and its files |
 | `POST /api/upload` with `kind=mcq` (+ `answer_mode=auto\|inline\|key\|none`) | Extraction job that also builds an MCQ dataset |

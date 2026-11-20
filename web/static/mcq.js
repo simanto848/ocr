@@ -88,15 +88,17 @@
       return;
     }
     for (const j of mcq) {
-      const el = document.createElement("button");
+      const el = document.createElement("div");
       el.className = "hist-item";
-      el.type = "button";
+      el.setAttribute("role", "button");
+      el.tabIndex = 0;
       if (j.job_id === M.jobId) el.classList.add("active");
       const n = j.mcq?.stats?.included;
       el.innerHTML =
         '<span class="hist-file-ico">MCQ</span>' +
-        '<span class="hist-info"><span class="hist-name"></span>' +
-        '<span class="hist-sub"></span></span>';
+        '<span class="hist-body"><span class="hist-name"></span>' +
+        '<span class="hist-sub"></span></span>' +
+        '<button class="hist-del" title="Delete dataset" aria-label="Delete dataset">×</button>';
       el.querySelector(".hist-name").textContent = j.filename || j.job_id;
       el.querySelector(".hist-sub").textContent =
         `${j.status === "done" ? `${n ?? 0} questions` : j.status} · ${timeAgo(j.created)}`;
@@ -104,6 +106,19 @@
         if (j.status === "done") loadJob(j.job_id);
         else if (j.status === "error") toastMsg(j.error || "Job failed", "err");
         else pollJob(j.job_id, j.filename);
+      };
+      el.onkeydown = (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
+      };
+      el.querySelector(".hist-del").onclick = async (e) => {
+        e.stopPropagation();
+        if (!window.confirm(`Delete "${j.filename}" and its dataset?`)) return;
+        try {
+          await mApi("/api/delete?id=" + encodeURIComponent(j.job_id), { method: "POST" });
+          if (M.jobId === j.job_id) { M.jobId = null; M.ds = null; showPane("empty"); }
+          toastMsg("Deleted", "ok");
+          refreshHistory();
+        } catch (err) { toastMsg("Delete failed: " + err.message, "err"); }
       };
       box.appendChild(el);
     }
@@ -526,6 +541,20 @@
     /* footer */
     const foot = document.createElement("div");
     foot.className = "mcq-card-foot";
+    const sref = it.source || {};
+    if (Array.isArray(sref.bbox) && sref.bbox.length === 4) {
+      const jump = document.createElement("button");
+      jump.type = "button";
+      jump.className = "mcq-btn";
+      jump.textContent = "📍 Source";
+      jump.title = "Locate this question in the original page";
+      jump.onclick = () => {
+        if (typeof window.showSource === "function") {
+          window.showSource(sref.page, sref.bbox, M.jobId);
+        }
+      };
+      foot.appendChild(jump);
+    }
     const clear = document.createElement("button");
     clear.type = "button";
     clear.className = "mcq-btn";
@@ -731,6 +760,31 @@
     };
 
     $("mcqDlZip").onclick = () => download("zip");
+    $("mcqRebuild").onclick = async () => {
+      if (!M.jobId) return;
+      const body = { job_id: M.jobId,
+                     answer_mode: $("mcqAnswerMode").value,
+                     ai_mode: $("mcqAiMode").value };
+      if (body.ai_mode !== "heuristic") {
+        body.ai_provider = currentProvider()?.id || $("mcqProvider").value;
+        body.ai_model = $("mcqModel").value.trim();
+        if (!body.ai_model) {
+          toastMsg("Choose or type a model first", "err");
+          return;
+        }
+      }
+      try {
+        toastMsg("Rebuilding dataset…", "info", 1600);
+        await mApi("/api/mcq/build", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        await loadJob(M.jobId);
+        toastMsg("Dataset rebuilt", "ok");
+      } catch (e) {
+        toastMsg(`Rebuild failed: ${e.message}`, "err");
+      }
+    };
     document.querySelectorAll(".mcq-fmt button").forEach((b) => {
       b.onclick = () => download(b.dataset.fmt);
     });

@@ -208,6 +208,13 @@ def _ocr_with_engine(image_path: Path, lang: str, engine: str, on_page=None,
     return text, boxes, _tesseract_version()
 
 
+def _image_size(path: Path):
+    """Pixel size of a page render — needed to scale OCR boxes onto the preview."""
+    from PIL import Image
+    with Image.open(path) as im:
+        return [im.width, im.height]
+
+
 def _save_page_image(src: Path, out_dir: Path, n: int) -> Path:
     """Ensure each job has a page_NNN.png available for preview."""
     from PIL import Image
@@ -241,7 +248,8 @@ def _pdf_pages(path: Path, out_dir: Path, lang: str, dpi: int, on_page, engine: 
                                               page=i + 1, total=total, vlm_ok=vlm_ok)
             source = "ocr"
         pages.append({"page": i + 1, "text": text, "boxes": boxes,
-                      "source": source, "render": rendered.name})
+                      "source": source, "render": rendered.name,
+                      "image_size": [bitmap.width, bitmap.height]})
     pdf.close()
     return pages
 
@@ -275,13 +283,17 @@ def _docx_pages(path: Path, out_dir: Path, lang: str, engine: str = "auto",
             blob = rel.target_part.blob
             im = Image.open(io.BytesIO(blob)).convert("RGB")
             img_no += 1
-            tmp = out_dir / f"embedded_{img_no}.png"
+            pn = len(pages) + 1
+            tmp = out_dir / f"page_{pn:03d}.png"
             im.save(tmp, "PNG")
             text, boxes, _ = _ocr_with_engine(tmp, lang, engine, vlm_ok=vlm_ok)
             if text.strip():
-                pages.append({"page": len(pages) + 1, "text": text, "boxes": boxes,
-                              "source": "ocr", "render": None,
+                pages.append({"page": pn, "text": text, "boxes": boxes,
+                              "source": "ocr", "render": tmp.name,
+                              "image_size": [im.width, im.height],
                               "note": f"embedded image {img_no}"})
+            else:
+                tmp.unlink(missing_ok=True)
         except Exception:
             continue
     if not pages:
@@ -351,7 +363,8 @@ def extract_file(path, lang="auto", out_dir=None, dpi=200, on_page=None,
                                           page=1, total=1, vlm_ok=vlm_ok)
         _save_page_image(path, out_dir, 1)
         pages = [{"page": 1, "text": text, "boxes": boxes, "source": "ocr",
-                  "render": "page_001.png"}]
+                  "render": "page_001.png",
+                  "image_size": _image_size(out_dir / "page_001.png")}]
     elif ext in PDF_EXTS:
         pages = _pdf_pages(path, out_dir, lang, dpi, on_page, ocr_engine, vlm_ok)
     elif ext == ".docx":

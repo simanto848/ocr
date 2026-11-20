@@ -219,6 +219,7 @@ def _build_mcq(job):
         items = ai_mcq.merge_items(items, (ai or {}).get("items") or [])
     elif mode == "ai":
         items = (ai or {}).get("items") or []
+    mcq_mod.attach_boxes(items, job.get("pages") or [])
 
     base = os.path.splitext(job["filename"])[0] or "Document"
     bundle = mcq_mod.write_dataset(
@@ -510,6 +511,19 @@ class Handler(BaseHTTPRequestHandler):
             if jdir is None or not (jdir / "result.json").is_file():
                 return self._json({"error": "unknown job"}, 404)
             self._json(json.loads((jdir / "result.json").read_text()))
+        elif u.path == "/api/page-image":
+            # Full-resolution render, used as the coordinate space for OCR boxes.
+            jdir = _job_dir((q.get("job") or q.get("id") or [""])[0])
+            if jdir is None:
+                return self._json({"error": "unknown job"}, 404)
+            try:
+                n = int((q.get("page") or ["1"])[0])
+            except ValueError:
+                n = 1
+            p = jdir / "pages" / f"page_{n:03d}.png"
+            if not p.is_file():
+                return self._json({"error": "no page image"}, 404)
+            self._send(200, p.read_bytes(), "image/png")
         elif u.path == "/api/preview":
             jdir = _job_dir((q.get("job") or [""])[0])
             if jdir is None:

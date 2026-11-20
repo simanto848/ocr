@@ -143,7 +143,11 @@
         <strong>Nothing to preview yet</strong>
         <span>Upload a document and its pages will appear here</span>
       </div>
-      <img id="preview" class="preview" alt="page preview" hidden>
+      <div id="previewStage" class="preview-stage">
+        <img id="preview" class="preview" alt="page preview" hidden>
+        <div id="hlOverlay" class="hl-overlay" aria-hidden="true"></div>
+        <div id="hlTip" class="hl-tip" hidden></div>
+      </div>
       <div id="progress" class="progress-card" hidden>
         <div class="progress-head">
           <span class="spinner"></span>
@@ -350,6 +354,7 @@
           <p id="mcqSub">—</p>
         </div>
         <div class="mcq-export">
+          <button id="mcqRebuild" class="mcq-btn" title="Re-extract with the current method / model">↻ Rebuild</button>
           <button id="mcqDlZip" class="btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>
             Download all

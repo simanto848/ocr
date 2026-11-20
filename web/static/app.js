@@ -166,24 +166,39 @@ function inlineMd(s) {
     .replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 
+function renderPageBody(pg) {
+  const text = pg.text || "";
+  const lines = text.split("\n");
+  const boxes = pg.boxes || [];
+  // Only wrap lines when they map 1:1 onto OCR boxes — otherwise the
+  // coordinates would point at the wrong words.
+  if (boxes.length && boxes.length === lines.length) {
+    return lines.map((line, i) => {
+      const b = boxes[i] || {};
+      const box = (b.box || []).join(",");
+      return `<span class="hl-line" data-page="${pg.page}" data-line="${i}" ` +
+             `data-box="${box}" title="Hover to locate this line in the page image">` +
+             (inlineMd(line) || "&nbsp;") + "</span>";
+    }).join("\n");
+  }
+  // No boxes (digital text / VLM): keep the familiar lightweight markdown look.
+  return esc(text)
+    .replace(/^### (.*)$/gm, "<h3>$1</h3>")
+    .replace(/^## (.*)$/gm, "<h3>$1</h3>")
+    .replace(/^# (.*)$/gm, "<h2>$1</h2>")
+    .replace(/^---+$/gm, "<hr>");
+}
+
 function renderOutput(job) {
   const out = $("output");
   if (currentTab === "json") {
     out.innerHTML = `<pre><code>${esc(JSON.stringify(job.result_json || {}, null, 2))}</code></pre>`;
   } else {
-    const md = job.markdown || "";
-    let html = esc(md)
-      .replace(/^### (.*)$/gm, "<h3>$1</h3>")
-      .replace(/^## (.*)$/gm, "<h3>$1</h3>")
-      .replace(/^# (.*)$/gm, "<h2>$1</h2>")
-      .replace(/^---+$/gm, "<hr>");
-    html = html.split("\n").map(line => {
-      if (/^<h[23]>/.test(line)) return line;
-      if (/^\s*[-*] /.test(line)) return `<div style="padding-left:12px">• ${line.replace(/^\s*[-*] /, "")}</div>`;
-      return line;
-    }).join("\n");
-    for (const pg of (job.pages || [])) {
-      html = html.replace(`<h3>Page ${pg.page}</h3>`, `<h3>Page ${pg.page} ${sourceBadge(pg)}</h3>`);
+    const pages = job.pages || [];
+    let html = `<h2>${esc(job.filename || "Document")}</h2>`;
+    for (const pg of pages) {
+      html += `<h3>Page ${pg.page} ${sourceBadge(pg)}</h3>`;
+      html += renderPageBody(pg);
     }
     out.innerHTML = html || `<div class="output-empty"><strong>No text detected</strong><span>Try a clearer image or another OCR engine.</span></div>`;
   }
@@ -202,8 +217,12 @@ function renderOutput(job) {
     $("metaPages").textContent = `${pages.length} page${pages.length === 1 ? "" : "s"}`;
     $("metaWords").textContent = `${wordCount(text)} words`;
     $("metaChars").textContent = `${text.length.toLocaleString()} chars`;
+    const linked = pages.some(p => (p.boxes || []).length > 0);
+    $("footHint").textContent = (linked && currentTab === "md")
+      ? "Hover the text ↔ the page image to locate a line" : "Ready";
   } else {
     meta.hidden = true;
+    $("footHint").textContent = "Ready";
   }
 }
 
@@ -233,6 +252,84 @@ function renderProgress(job) {
   $("progressDetail").textContent = p.of ? `Page ${p.page} of ${p.of} · this can take a moment on first run` : "";
 }
 
+/* ---------------- text ↔ source highlighting ---------------- */
+let hlPending = null;
+
+function _pageOf(n) {
+  return (currentJob?.pages || []).find(p => p.page === n);
+}
+
+function setActiveLine(page, line, on, source) {
+  const textEl = document.querySelector(`.hl-line[data-page="${page}"][data-line="${line}"]`);
+  const boxEl = document.querySelector(`.hl-box[data-line="${line}"]`);
+  if (textEl) textEl.classList.toggle("active", on);
+  if (boxEl) boxEl.classList.toggle("active", on);
+  const tip = $("hlTip");
+  if (!on) { tip.hidden = true; return; }
+  if (source === "image" && boxEl) {
+    tip.textContent = boxEl.title || "";
+    tip.hidden = !tip.textContent;
+    tip.style.left = boxEl.style.left;
+    tip.style.top = `calc(${boxEl.style.top} - 34px)`;
+    if (textEl) textEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+}
+
+function applyPendingHighlight() {
+  // Keep the request: a second image load (page switch / re-render) must be
+  // able to re-apply the same highlight after the overlay is rebuilt.
+  if (!hlPending || hlPending.page !== currentPage) return;
+  const p = hlPending;
+  if (p.line != null) {
+    setActiveLine(p.page, p.line, true, "text");
+    return;
+  }
+  if (!p.box || p.box.length !== 4) return;
+  const pg = _pageOf(p.page);
+  if (!pg || !pg.boxes) return;
+  let best = -1, bestDist = Infinity;
+  pg.boxes.forEach((b, i) => {
+    const c = b.box;
+    if (!c) return;
+    const d = Math.abs(c[0] - p.box[0]) + Math.abs(c[1] - p.box[1]);
+    if (d < bestDist) { bestDist = d; best = i; }
+  });
+  if (best >= 0) {
+    setActiveLine(p.page, best, true, "text");
+    const el = document.querySelector(`.hl-box[data-line="${best}"]`);
+    if (el) el.classList.add("mcq-active");
+  }
+}
+
+function renderHighlights() {
+  const overlay = $("hlOverlay");
+  overlay.innerHTML = "";
+  const img = $("preview");
+  const pg = _pageOf(currentPage);
+  if (!img.complete || !img.naturalWidth || !pg) return;
+  const boxes = pg.boxes || [];
+  if (!boxes.length) return;
+  const size = pg.image_size || [img.naturalWidth, img.naturalHeight];
+  const sx = img.clientWidth / size[0];
+  const sy = img.clientHeight / size[1];
+  boxes.forEach((b, i) => {
+    const c = b.box || [];
+    if (c.length !== 4 || !c.every(Number.isFinite)) return;
+    const el = document.createElement("div");
+    el.className = "hl-box";
+    el.dataset.line = String(i);
+    el.style.left = (c[0] * sx) + "px";
+    el.style.top = (c[1] * sy) + "px";
+    el.style.width = Math.max(3, (c[2] - c[0]) * sx) + "px";
+    el.style.height = Math.max(3, (c[3] - c[1]) * sy) + "px";
+    el.title = b.text || "";
+    el.addEventListener("mouseenter", () => setActiveLine(currentPage, i, true, "image"));
+    el.addEventListener("mouseleave", () => setActiveLine(currentPage, i, false, "image"));
+    overlay.appendChild(el);
+  });
+  applyPendingHighlight();
+}
+
 /* ---------------- preview ---------------- */
 function showPage() {
   if (!currentJob) return;
@@ -245,7 +342,9 @@ function showPage() {
   const probe = new Image();
   probe.onload = () => {
     const img = $("preview");
+    img.onload = renderHighlights;
     img.src = url; img.hidden = false; $("previewEmpty").hidden = true;
+    if (img.complete) renderHighlights();
   };
   probe.onerror = () => {
     $("preview").hidden = true; $("previewEmpty").hidden = false;
@@ -271,7 +370,7 @@ async function selectJob(id) {
 
   if (job.status === "done") {
     renderProgress(job); renderOutput(job); showPage();
-    $("footHint").textContent = "Ready · select text to copy";
+    // renderOutput sets a hover hint when OCR boxes are available.
   } else if (job.status === "error") {
     renderProgress(job); showPage();
     $("resultMeta").hidden = true;
@@ -421,6 +520,48 @@ function init() {
 
   $("prevPage").onclick = () => { if (currentPage > 1) { currentPage--; showPage(); } };
   $("nextPage").onclick = () => { if (currentJob && currentPage < currentJob.n_pages) { currentPage++; showPage(); } };
+
+  // Hover extracted text → locate the matching line in the source image.
+  $("output").addEventListener("mouseover", (e) => {
+    const el = e.target.closest(".hl-line");
+    if (!el) return;
+    const page = Number(el.dataset.page), line = Number(el.dataset.line);
+    if (page !== currentPage) {
+      currentPage = page;
+      hlPending = { page, line };
+      showPage();
+    } else {
+      setActiveLine(page, line, true, "text");
+    }
+  });
+  $("output").addEventListener("mouseout", (e) => {
+    const el = e.target.closest(".hl-line");
+    if (!el) return;
+    setActiveLine(Number(el.dataset.page), Number(el.dataset.line), false, "text");
+    hlPending = null;
+  });
+  window.addEventListener("resize", renderHighlights);
+  // Used by MCQ cards: jump to the source page and highlight its question.
+  window.showSource = async (page, box, jobId) => {
+    document.getElementById("navText").click();
+    if (jobId && (!currentJob || currentJob.job_id !== jobId)) {
+      let job;
+      try { job = await api("/api/job?id=" + encodeURIComponent(jobId)); }
+      catch (e) { toast("Could not open the source job", "err"); return; }
+      currentJob = job;
+      currentPage = 1;
+      $("docName").textContent = job.filename;
+      const fi = fileIcon(job.filename);
+      $("docIcon").innerHTML = `<span style="font-size:9px;font-weight:800">${fi.label}</span>`;
+      $("docSub").textContent = `${job.engine || "OCR"} · ${job.n_pages || 0} page${job.n_pages === 1 ? "" : "s"}`;
+      renderProgress(job); renderOutput(job); showPage();
+      refreshHistory(job.job_id);
+    }
+    if (!currentJob) return;
+    currentPage = Math.max(1, Math.min(currentJob.n_pages || 1, Number(page) || 1));
+    hlPending = { page: currentPage, box };
+    showPage();
+  };
   $("reloadJob").onclick = () => { if (currentJob) { selectJob(currentJob.job_id); toast("Refreshed", "info", 1600); } };
   $("tabMd").onclick = () => { currentTab = "md"; if (currentJob) renderOutput(currentJob); };
   $("tabJson").onclick = () => { currentTab = "json"; if (currentJob) renderOutput(currentJob); };

@@ -705,3 +705,43 @@ kbd {
 .ai-add { width: 100%; margin-top: 10px; }
 #mcqAiHint { margin-top: 8px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+/* ============================================================
+   Bidirectional text <-> source highlighting
+   ============================================================ */
+.preview-stage { position: relative; display: inline-block; max-width: 100%; line-height: 0; }
+.preview-stage:has(.preview[hidden]) { display: none; }
+.hl-overlay { position: absolute; inset: 0; pointer-events: none; }
+.hl-box {
+  position: absolute; pointer-events: auto; cursor: crosshair;
+  border: 1.5px solid transparent; border-radius: 3px;
+  background: transparent; transition: background .12s, border-color .12s, box-shadow .12s;
+}
+.hl-box:hover, .hl-box.active {
+  background: color-mix(in srgb, var(--brand) 18%, transparent);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 25%, transparent);
+}
+.hl-box.mcq-active {
+  background: color-mix(in srgb, var(--good) 22%, transparent);
+  border-color: var(--good);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 30%, transparent);
+}
+.hl-tip {
+  position: absolute; z-index: 4; max-width: 280px; pointer-events: none;
+  background: color-mix(in srgb, var(--ink) 92%, transparent); color: var(--panel);
+  font-size: 11px; line-height: 1.4; padding: 6px 9px; border-radius: 7px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.22); line-height: 1.4;
+}
+.hl-line {
+  display: block; border-radius: 4px; padding: 1px 3px; margin: 0 -3px;
+  cursor: text; transition: background .14s, box-shadow .14s;
+}
+.hl-line:hover, .hl-line.active {
+  background: color-mix(in srgb, var(--brand) 15%, transparent);
+  box-shadow: inset 3px 0 var(--brand);
+}
+.hl-hint {
+  font-size: 10.5px; color: var(--ink-3); padding: 4px 14px 8px;
+  line-height: 1.4; flex: none;
+}

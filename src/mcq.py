@@ -622,6 +622,52 @@ def set_item_answer(item: dict, label: str | None):
     return item
 
 
+def _norm_tokens(text: str):
+    return {t for t in re.findall(r"\w+", ascii_digits(text or "").casefold())
+            if len(t) > 1}
+
+
+def attach_boxes(items, pages) -> list:
+    """Link extracted questions to OCR line boxes for source highlighting.
+
+    Adds ``bbox``, ``line`` and ``box_text`` to each item's ``source`` object
+    when the page has OCR boxes. Uses token-overlap matching, so it works when
+    OCR line breaks differ from the parser's question text.
+    """
+    for it in items or []:
+        src = it.get("source") or {}
+        try:
+            pnum = int(src.get("page"))
+        except (TypeError, ValueError):
+            continue
+        pg = next((p for p in pages or [] if p.get("page") == pnum), None)
+        if not pg:
+            continue
+        boxes = pg.get("boxes") or []
+        if not boxes:
+            continue
+        tokens = _norm_tokens(it.get("question", ""))
+        if not tokens:
+            continue
+        best_i, best_score = -1, 0.0
+        for i, b in enumerate(boxes):
+            bt = _norm_tokens(b.get("text", ""))
+            if not bt:
+                continue
+            score = len(tokens & bt) / max(1, len(tokens | bt))
+            if score > best_score:
+                best_i, best_score = i, score
+        if best_i >= 0 and best_score >= 0.18:
+            b = boxes[best_i]
+            src["bbox"] = b.get("box")
+            src["line"] = best_i
+            src["box_text"] = b.get("text", "")
+            if pg.get("image_size"):
+                src["image_size"] = pg["image_size"]
+        it["source"] = src
+    return items
+
+
 def dataset_stats(items) -> dict:
     inc = [i for i in items if i.get("include", True)]
     with_ans = [i for i in inc if (i.get("answer") or {}).get("index") is not None]

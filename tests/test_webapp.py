@@ -304,3 +304,16 @@ def test_mcq_build_with_ai_mode_hybrid(server, monkeypatch):
     assert body["job"]["mcq"]["ai"]["provider"] == "ollama"
     assert len(body["dataset"]["items"]) == 2  # Q1 merged, Q2 from heuristic
     assert body["dataset"]["items"][0]["explanation"] == "AI explanation"
+
+
+def test_page_image_endpoint(server):
+    from PIL import Image
+    base, jobs = server
+    jid = _make_done_job(jobs)
+    (jobs / jid / "pages").mkdir()
+    Image.new("RGB", (40, 60), "white").save(jobs / jid / "pages" / "page_001.png")
+    r = requests.get(base + "/api/page-image", params={"job": jid, "page": 1}, timeout=5)
+    assert r.status_code == 200
+    assert r.headers["Content-Type"] == "image/png"
+    assert requests.get(base + "/api/page-image",
+                        params={"job": "../jobs", "page": 1}, timeout=5).status_code == 404
