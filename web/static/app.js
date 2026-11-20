@@ -270,6 +270,8 @@ function showPage() {
   };
   probe.onerror = () => {
     $("preview").hidden = true; $("previewEmpty").hidden = false;
+    $("hlOverlay").innerHTML = "";
+    hlPending = null;
     $("previewEmpty").querySelector("strong").textContent = "Preparing preview…";
   };
   probe.src = url;

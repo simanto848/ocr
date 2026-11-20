@@ -1,4 +1,12 @@
 /* Bidirectional text <-> source-image highlighting (loaded after app.js). */
+let hlObserver = null;
+
+function observePreviewSize() {
+  const stage = $("previewStage");
+  if (!stage || hlObserver || typeof ResizeObserver === "undefined") return;
+  hlObserver = new ResizeObserver(() => renderHighlights());
+  hlObserver.observe(stage);
+}
 /* ---------------- text ↔ source highlighting ---------------- */
 let hlPending = null;
 
@@ -50,6 +58,7 @@ function applyPendingHighlight() {
 
 function renderHighlights() {
   const overlay = $("hlOverlay");
+  observePreviewSize();
   overlay.innerHTML = "";
   const img = $("preview");
   const pg = _pageOf(currentPage);
