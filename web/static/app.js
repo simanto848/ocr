@@ -1,5 +1,7 @@
 /* DocExtract client — upload → poll → preview + text/JSON. Polished UX edition. */
 const $ = (id) => document.getElementById(id);
+const API_KEY = document.querySelector('meta[name="ocr-api-key"]')?.content || "";
+const AUTH_HEADERS = API_KEY ? { "X-API-Key": API_KEY } : {};
 let currentJob = null, currentPage = 1, currentTab = "md", pollTimer = null;
 let batchJobs = [], batchTimer = null;
 
@@ -7,7 +9,8 @@ function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-async function api(path, opts) {
+async function api(path, opts = {}) {
+  opts.headers = { ...(opts.headers || {}), ...AUTH_HEADERS };
   const r = await fetch(path, opts);
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
   return r.json();
@@ -353,7 +356,7 @@ async function uploadFiles(files) {
   $("previewEmpty").querySelector("strong").textContent = "Uploading your files…";
 
   try {
-    const r = await fetch("/api/upload", { method: "POST", body: fd });
+    const r = await fetch("/api/upload", { method: "POST", body: fd, headers: AUTH_HEADERS });
     const j = await r.json();
     if (!r.ok) throw new Error(j.error || "upload failed");
     batchJobs = (j.jobs || [{ job_id: j.job_id, filename: list[0].name }]).map(x => ({

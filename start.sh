@@ -10,7 +10,11 @@
 #   WEB_HOST=0.0.0.0 ./start.sh     expose web on your LAN (for the Android app)
 # =============================================================================
 set -u
-ROOT="${0:A:h}"                       # directory of this script (zsh)
+if [ -n "${ZSH_VERSION:-}" ]; then
+  ROOT="${0:A:h}"
+else
+  ROOT="$(cd "$(dirname "$0")" && pwd)"
+fi
 VLM_PORT="${VLM_PORT:-8090}"
 WEB_PORT="${WEB_PORT:-8000}"
 WEB_HOST="${WEB_HOST:-127.0.0.1}"
@@ -20,10 +24,25 @@ VLM_PID="$RUN_DIR/vlm.pid"
 WEB_PID="$RUN_DIR/web.pid"
 VLM_LOG="$LOG_DIR/vlm_service.log"
 WEB_LOG="$LOG_DIR/web_app.log"
+KEY_FILE="$RUN_DIR/api_key"
 mkdir -p "$RUN_DIR" "$LOG_DIR"
 
+# A LAN-exposed server must require a shared secret. Generate one once and
+# reuse it so the Android app keeps working across restarts.
+if [[ "$WEB_HOST" != "127.0.0.1" && "$WEB_HOST" != "localhost" ]]; then
+  if [[ -z "${OCR_API_KEY:-}" ]]; then
+    if [[ -f "$KEY_FILE" ]]; then OCR_API_KEY="$(cat "$KEY_FILE")"; else
+      OCR_API_KEY="$(python3 -c 'import secrets; print(secrets.token_hex(16))' 2>/dev/null || openssl rand -hex 16)"
+      printf '%s\n' "$OCR_API_KEY" > "$KEY_FILE"; chmod 600 "$KEY_FILE"
+    fi
+  fi
+  export OCR_API_KEY
+  printf '%s\n' "🔑 LAN mode — API key: $OCR_API_KEY"
+  printf '%s\n' "   Enter this in the Android app (Server settings)."
+fi
+
 # ---------- helpers ----------
-say() { print -r -- "$@"; }
+say() { printf '%s\n' "$*"; }
 stop_pid() {
   local f="$1"
   [[ -f "$f" ]] || return 0

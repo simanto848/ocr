@@ -50,13 +50,49 @@ JOBS_DIR = WEB_DIR / "jobs"
 INDEX_JSON = WEB_DIR / "jobs.json"
 MAX_UPLOAD = 100 * 1024 * 1024
 _lock = threading.Lock()
+# Bound actual OCR work (threads are cheap; Paddle/MPS inference is not).
+_ocr_slots = threading.Semaphore(max(1, int(os.environ.get("OCR_CONCURRENCY", "2"))))
+# In-memory index with throttled disk flushes: avoids O(n²) rewrites of the
+# whole index on every progress tick of every page.
+_INDEX_CACHE = {}
+
+# --- Security -----------------------------------------------------------------
+# Job IDs are always 12 lowercase hex chars (uuid4().hex[:12]). Rejecting
+# anything else prevents path traversal such as "id=../jobs" from resolving to
+# JOBS_DIR itself and deleting every job.
+JID_RE = re.compile(r"^[a-f0-9]{12}$")
+API_KEY = os.environ.get("OCR_API_KEY", "")
+CORS_ORIGINS = [o.strip() for o in os.environ.get("OCR_CORS_ORIGINS", "").split(",") if o.strip()]
+STATIC_ROOT = (ROOT / "web" / "static").resolve()
+
+
+def _valid_jid(jid: str) -> bool:
+    return bool(jid and JID_RE.fullmatch(jid))
+
+
+def _job_dir(jid: str):
+    """Return the job directory only for a valid ID confined inside JOBS_DIR."""
+    if not _valid_jid(jid):
+        return None
+    d = (JOBS_DIR / jid)
+    try:
+        if not d.resolve().is_relative_to(JOBS_DIR.resolve()):
+            return None
+    except (OSError, ValueError):
+        return None
+    return d
 
 
 def _read_index():
+    key = str(INDEX_JSON)
+    if key in _INDEX_CACHE:
+        return list(_INDEX_CACHE[key][0])
     try:
-        return json.loads(INDEX_JSON.read_text())
+        jobs = json.loads(INDEX_JSON.read_text())
     except Exception:
-        return []
+        jobs = []
+    _INDEX_CACHE[key] = (jobs, time.time())
+    return list(jobs)
 
 
 def _atomic_write(path: _Path, text: str):
@@ -72,8 +108,16 @@ def _atomic_write(path: _Path, text: str):
             pass
 
 
-def _write_index(jobs):
-    _atomic_write(INDEX_JSON, json.dumps(jobs, indent=1))
+def _write_index(jobs, force=False):
+    key = str(INDEX_JSON)
+    _, last = _INDEX_CACHE.get(key, (None, 0.0))
+    now = time.time()
+    # Always persist terminal states; otherwise flush at most every 2 seconds.
+    write = (force or now - last >= 2.0
+             or all(j.get("status") in ("done", "error") for j in jobs))
+    _INDEX_CACHE[key] = (list(jobs), now if write else last)
+    if write:
+        _atomic_write(INDEX_JSON, json.dumps(jobs, indent=1))
 
 
 def _save_job(job):
@@ -155,9 +199,10 @@ def _process_job(job_id: str):
                 pct = round(10 + 90 * (i - 1) / max(1, n), 1)
             _set_progress(job, stage, i, n, pct)
 
-        result = extract_file(upload, lang=job.get("lang", "auto"),
-                              out_dir=pages_dir, on_page=_cb,
-                              ocr_engine=job.get("ocr_engine", "auto"))
+        with _ocr_slots:  # bound concurrent Paddle/Tesseract inference
+            result = extract_file(upload, lang=job.get("lang", "auto"),
+                                  out_dir=pages_dir, on_page=_cb,
+                                  ocr_engine=job.get("ocr_engine", "auto"))
         pages = result["pages"]
         # Build previews as soon as each page image exists.
         for pg in pages:
@@ -198,18 +243,52 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Cache-Control", "no-store")
+        if API_KEY and ctype.startswith("text/html"):
+            self.send_header("Set-Cookie",
+                             f"ocr_api_key={API_KEY}; Path=/; SameSite=Strict; HttpOnly")
+        # Only an explicit allow-list gets CORS; same-origin needs none. This
+        # stops arbitrary websites from reading/POSTing to a LAN-exposed server.
+        origin = self.headers.get("Origin")
+        if origin and origin in CORS_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Authorization")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
         self.end_headers()
         self.wfile.write(body)
 
     def _json(self, obj, code=200):
         self._send(code, json.dumps(obj, ensure_ascii=False).encode(), "application/json")
 
+    def _authorized(self) -> bool:
+        """Optional shared-secret auth. Same-origin UI passes the key from a
+        meta tag; native clients pass an X-API-Key header."""
+        if not API_KEY:
+            return True
+        supplied = (self.headers.get("X-API-Key")
+                    or self.headers.get("Authorization", "").removeprefix("Bearer ")
+                    or "")
+        if not supplied and "ocr_api_key=" in (self.headers.get("Cookie") or ""):
+            supplied = self.headers["Cookie"].split("ocr_api_key=", 1)[1].split(";", 1)[0]
+        return supplied == API_KEY
+
+    def _csrf_ok(self) -> bool:
+        """Browser state-changing requests must be same-origin. Native clients
+        (Android) send no Origin and rely on the API key instead."""
+        origin = self.headers.get("Origin")
+        if not origin:
+            return True
+        host = self.headers.get("Host", "")
+        return origin in (f"http://{host}", f"https://{host}") or origin in CORS_ORIGINS
+
+    def do_OPTIONS(self):  # noqa: N802
+        self._send(204, b"")
+
     def _delete_job(self, jid):
         """Remove a job's directory on disk and its entry in the index."""
-        jdir = (JOBS_DIR / jid).resolve()
-        # Safety: only delete inside our jobs directory.
-        if not jid or not str(jdir).startswith(str(JOBS_DIR.resolve())) or not jdir.is_dir():
+        jdir = _job_dir(jid)
+        if jdir is None or not jdir.is_dir():
             return self._json({"error": "unknown job"}, 404)
         try:
             shutil.rmtree(jdir)
@@ -217,12 +296,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._json({"error": f"could not delete files: {e}"}, 500)
         with _lock:
             jobs = [j for j in _read_index() if j.get("job_id") != jid]
-            _write_index(jobs)
+            _write_index(jobs, force=True)
         return self._json({"ok": True, "job_id": jid})
 
     def do_DELETE(self):  # noqa: N802
         u = urlparse(self.path)
         q = parse_qs(u.query)
+        if not self._authorized() or not self._csrf_ok():
+            return self._json({"error": "unauthorized"}, 401)
         if u.path == "/api/job":
             return self._delete_job((q.get("id") or [""])[0])
         self._json({"error": "not found"}, 404)
@@ -230,11 +311,18 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):  # noqa: N802
         u = urlparse(self.path)
         q = parse_qs(u.query)
+        if u.path.startswith("/api/") and not self._authorized():
+            return self._json({"error": "unauthorized"}, 401)
         if u.path in ("/", "/index.html"):
-            self._send(200, (WEB_DIR.parent.parent / "web" / "static" / "index.html").read_bytes(), "text/html; charset=utf-8")
+            page = (STATIC_ROOT / "index.html").read_bytes()
+            if API_KEY:
+                # Inject the key for same-origin JS (avoids exposing it in JS source).
+                tag = f'<meta name="ocr-api-key" content="{API_KEY}">'.encode()
+                page = page.replace(b"</head>", tag + b"</head>", 1)
+            self._send(200, page, "text/html; charset=utf-8")
         elif u.path.startswith("/static/"):
-            f = (ROOT / "web" / u.path[1:]).resolve()
-            if not str(f).startswith(str(ROOT / "web")) or not f.is_file():
+            f = (STATIC_ROOT / u.path[len("/static/"):]).resolve()
+            if not f.is_relative_to(STATIC_ROOT) or not f.is_file():
                 return self._json({"error": "not found"}, 404)
             self._send(200, f.read_bytes(), mimetypes.guess_type(str(f))[0] or "application/octet-stream")
         elif u.path == "/api/status":
@@ -248,27 +336,28 @@ class Handler(BaseHTTPRequestHandler):
         elif u.path == "/api/history":
             self._json(_read_index())
         elif u.path == "/api/job":
-            jid = (q.get("id") or [""])[0]
-            p = JOBS_DIR / jid / "result.json"
-            if not jid or not p.is_file():
+            jdir = _job_dir((q.get("id") or [""])[0])
+            if jdir is None or not (jdir / "result.json").is_file():
                 return self._json({"error": "unknown job"}, 404)
-            self._json(json.loads(p.read_text()))
+            self._json(json.loads((jdir / "result.json").read_text()))
         elif u.path == "/api/preview":
-            jid = (q.get("job") or [""])[0]
+            jdir = _job_dir((q.get("job") or [""])[0])
+            if jdir is None:
+                return self._json({"error": "unknown job"}, 404)
             try:
                 n = int((q.get("page") or ["1"])[0])
             except ValueError:
                 n = 1
-            p = JOBS_DIR / jid / "preview" / f"page_{n:03d}.png"
+            p = jdir / "preview" / f"page_{n:03d}.png"
             if not p.is_file():
                 return self._json({"error": "no preview yet"}, 404)
             self._send(200, p.read_bytes(), "image/png")
         elif u.path == "/api/download":
-            jid = (q.get("job") or [""])[0]
-            fmt = (q.get("format") or ["md"])[0]
-            p = JOBS_DIR / jid / "result.json"
-            if not p.is_file():
+            jdir = _job_dir((q.get("job") or [""])[0])
+            if jdir is None or not (jdir / "result.json").is_file():
                 return self._json({"error": "unknown job"}, 404)
+            fmt = (q.get("format") or ["md"])[0]
+            p = jdir / "result.json"
             job = json.loads(p.read_text())
             if job.get("status") != "done":
                 return self._json({"error": "job not done"}, 409)
@@ -292,6 +381,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802
         u = urlparse(self.path)
+        if u.path.startswith("/api/") and (not self._authorized() or not self._csrf_ok()):
+            return self._json({"error": "unauthorized"}, 401)
         if u.path == "/api/delete":
             q = parse_qs(u.query)
             return self._delete_job((q.get("id") or [""])[0])
