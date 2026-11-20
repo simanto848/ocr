@@ -331,3 +331,13 @@ def test_mcq_rename_updates_manifest_and_exports(server):
     assert json.loads((root / "manifest.json").read_text())["name"] == "Biology MCQs"
     assert (root / "mcq.md").read_text().startswith("# Biology MCQs")
     assert "Biology MCQs" in (root / "dataset_card.md").read_text()
+
+
+def test_page_image_missing_page_returns_404(server):
+    from PIL import Image
+    base, jobs = server
+    jid = _make_done_job(jobs)
+    (jobs / jid / "pages").mkdir()
+    Image.new("RGB", (20, 20), "white").save(jobs / jid / "pages" / "page_001.png")
+    r = requests.get(base + "/api/page-image", params={"job": jid, "page": 9}, timeout=5)
+    assert r.status_code == 404

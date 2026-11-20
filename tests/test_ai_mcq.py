@@ -252,3 +252,38 @@ def test_extract_mcq_uses_chunks_and_progress(monkeypatch):
     assert len(result["items"]) == 1
     assert progress == [(1, 1)]
     assert "--- PAGE 1 ---" in seen[0]
+
+
+def test_unknown_provider_raises_key_error():
+    with pytest.raises(KeyError):
+        ai_providers.resolve("does-not-exist")
+    with pytest.raises(KeyError):
+        ai_providers.fetch_models("does-not-exist")
+
+
+def test_custom_provider_rejects_unknown_kind():
+    with pytest.raises(ValueError, match="kind"):
+        ai_providers.add_custom({"name": "bad", "base_url": "https://x.test",
+                                 "kind": "magic"})
+
+
+def test_extract_json_handles_nested_objects_and_array_root():
+    obj = ai_mcq.extract_json('```json\n{"questions": [{"meta": {"a": 1}}]}\n```')
+    assert obj["questions"][0]["meta"]["a"] == 1
+    assert ai_mcq.normalize_ai_result([{"question": "q?", "options": [
+        {"label": "A", "text": "1"}, {"label": "B", "text": "2"}]}])[0]["question"] == "q?"
+
+
+def test_chunks_respect_budget():
+    pages = [{"page": i, "text": "x" * 4000} for i in range(1, 5)]
+    groups = list(ai_mcq._chunks(pages, budget=5000))
+    assert len(groups) == 4
+    assert [g[0]["page"] for g in groups] == [1, 2, 3, 4]
+
+
+def test_test_provider_success(monkeypatch):
+    monkeypatch.setattr(ai_providers, "fetch_models", lambda *a, **k: [{"id": "m"}])
+    monkeypatch.setattr(ai_providers, "chat", lambda *a, **k: "OK")
+    result = ai_providers.test_provider("ollama")
+    assert result["ok"] is True
+    assert result["sample"] == "OK"
