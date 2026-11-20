@@ -287,3 +287,43 @@ def test_test_provider_success(monkeypatch):
     result = ai_providers.test_provider("ollama")
     assert result["ok"] is True
     assert result["sample"] == "OK"
+
+
+def test_request_retries_rate_limit(monkeypatch):
+    import io
+    from urllib.error import HTTPError
+
+    class FakeResponse:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return b'{"ok": true}'
+
+    calls = []
+
+    def fake_urlopen(req, timeout=None):
+        calls.append(req.full_url)
+        if len(calls) == 1:
+            raise HTTPError(req.full_url, 429, "slow down", {}, io.BytesIO(b"rate"))
+        return FakeResponse()
+
+    monkeypatch.setattr(ai_providers.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(ai_providers.time, "sleep", lambda s: None)
+    assert ai_providers._request("https://x.test/v1/models") == {"ok": True}
+    assert len(calls) == 2
+
+
+def test_request_does_not_retry_bad_request(monkeypatch):
+    import io
+    from urllib.error import HTTPError
+
+    calls = []
+
+    def fake_urlopen(req, timeout=None):
+        calls.append(1)
+        raise HTTPError(req.full_url, 400, "bad", {}, io.BytesIO(b"bad input"))
+
+    monkeypatch.setattr(ai_providers.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(ai_providers.time, "sleep", lambda s: None)
+    with pytest.raises(RuntimeError, match="HTTP 400"):
+        ai_providers._request("https://x.test/v1/models")
+    assert len(calls) == 1

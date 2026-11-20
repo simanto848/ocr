@@ -244,21 +244,33 @@ def configure(pid: str, data: dict) -> dict:
 # --------------------------------------------------------------------------- #
 # HTTP plumbing
 # --------------------------------------------------------------------------- #
-def _request(url: str, data=None, headers=None, timeout=DEFAULT_TIMEOUT, method=None):
+_RETRYABLE = {408, 429, 500, 502, 503, 504}
+
+
+def _request(url: str, data=None, headers=None, timeout=DEFAULT_TIMEOUT, method=None,
+             retries=2):
     headers = {"Accept": "application/json", **(headers or {})}
     body = None
     if data is not None:
         body = json.dumps(data).encode("utf-8")
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(url, data=body, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            raw = r.read()
-    except urllib.error.HTTPError as e:
-        raw = e.read()[:2000].decode("utf-8", "ignore")
-        raise RuntimeError(f"HTTP {e.code}: {raw}") from None
-    except urllib.error.URLError as e:
-        raise RuntimeError(str(e.reason)) from None
+    for attempt in range(retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                raw = r.read()
+            break
+        except urllib.error.HTTPError as e:
+            if e.code in _RETRYABLE and attempt < retries:
+                time.sleep(0.4 * (2 ** attempt))
+                continue
+            raw = e.read()[:2000].decode("utf-8", "ignore")
+            raise RuntimeError(f"HTTP {e.code}: {raw}") from None
+        except urllib.error.URLError as e:
+            if attempt < retries:
+                time.sleep(0.4 * (2 ** attempt))
+                continue
+            raise RuntimeError(str(e.reason)) from None
     if not raw:
         return {}
     try:
