@@ -98,7 +98,7 @@
         '<span class="hist-file-ico">MCQ</span>' +
         '<span class="hist-body"><span class="hist-name"></span>' +
         '<span class="hist-sub"></span></span>' +
-        '<button class="hist-del" title="Delete dataset" aria-label="Delete dataset">×</button>';
+        '<button class="hist-del text-del" title="Delete dataset" aria-label="Delete dataset">×</button>';
       el.querySelector(".hist-name").textContent = j.filename || j.job_id;
       el.querySelector(".hist-sub").textContent =
         `${j.status === "done" ? `${n ?? 0} questions` : j.status} · ${timeAgo(j.created)}`;
@@ -110,6 +110,7 @@
       el.onkeydown = (e) => {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
       };
+      el.querySelector(".hist-del").onkeydown = (e) => e.stopPropagation();
       el.querySelector(".hist-del").onclick = async (e) => {
         e.stopPropagation();
         if (!window.confirm(`Delete "${j.filename}" and its dataset?`)) return;
