@@ -58,8 +58,10 @@ open http://127.0.0.1:8000
 That's it. The launcher waits for the VLM to load before starting the web app, so the UI
 immediately shows **“PaddleOCR-VL ready”**.
 
-For the Android app: `WEB_HOST=0.0.0.0 ./start.sh`, then set the app's server address to your
-computer's LAN IP (e.g. `http://<your-computer-ip>:8000`).
+For the Android app: `WEB_HOST=0.0.0.0 ./start.sh`. LAN mode automatically requires a shared
+secret — the launcher prints a **API key** and stores it in `.cache/run/api_key`. Enter that key
+in the app's **API key** field (and in the server URL field use your computer's LAN IP,
+e.g. `http://<your-computer-ip>:8000`). The browser UI gets the key automatically.
 
 ---
 
@@ -206,7 +208,8 @@ Shortcuts: `⌘/Ctrl+K` upload · `←`/`→` pages · `Esc` close dialogs.
 
 - **Server mode** (default): full format/language support via the Python server. Emulator:
   `http://10.0.2.2:8000`. Physical phone: `http://<computer-LAN-IP>:8000` (same Wi-Fi, start the
-  server with `WEB_HOST=0.0.0.0 ./start.sh`). Tap **Test connection**.
+  server with `WEB_HOST=0.0.0.0 ./start.sh`). LAN mode prints an API key — paste it into the
+  **API key** field. Tap **Test connection**.
 - **Offline mode**: on-device Tesseract for images, camera photos and text files — no network
   needed. For PDF/DOC/DOCX use Server mode.
 

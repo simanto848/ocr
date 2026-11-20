@@ -4,11 +4,11 @@ Upload a file, detect and extract its text. Works with **English**, **বাং�
 and **हिन्दी (Hindi)**, using:
 
 - **Digital text** read straight from the file (PDF text layer, DOCX, TXT, HTML …) — no OCR needed.
-- **Tesseract 5** OCR (`eng+ben+hin`) for scanned PDFs, images and photos.
+- **PaddleOCR-VL 1.6** (layout-aware VLM, 109 languages) for scanned pages — the default when
+  its service is running. **Tesseract 5** (`eng+ben+hin`) is the fast fallback.
 
-The old TrOCR pipeline is still available under `src/infer.py` for experiments, but the
-web/Android apps use Tesseract because it handles all three scripts reliably and does not
-need a GPU or a fine-tuned checkpoint.
+The old TrOCR pipeline is still available under `src/infer.py` for experiments. The web/Android
+apps prefer PaddleOCR-VL for accurate Bengali/Hindi and fall back to Tesseract automatically.
 
 ---
 
@@ -23,6 +23,7 @@ cd ocr
 ./start.sh stop            # stop everything
 ./start.sh logs            # tail both logs
 WEB_HOST=0.0.0.0 ./start.sh   # expose on your LAN for the Android app
+                              # (prints a one-time API key you must enter in the app)
 ```
 
 The launcher waits for the VLM to finish loading before starting the web app, so
@@ -109,7 +110,9 @@ Located in `ocr_app/`. Two modes:
   format and language support. Set the server address in the app:
   - Android emulator → `http://10.0.2.2:8000`
   - Physical phone → `http://<your-computer-LAN-IP>:8000` (start the server with
-    `./web/run.sh 8000 0.0.0.0`; phone and computer must be on the same Wi-Fi).
+    `WEB_HOST=0.0.0.0 ./start.sh`; phone and computer must be on the same Wi-Fi).
+    LAN mode requires an API key — the launcher prints it; paste it into the app's
+    **API key** field.
 - **Offline mode**: on-device Tesseract OCR with bundled `eng`, `ben`, `hin` language data.
   Works with no network for images/photos and plain text files. For PDF/DOC/DOCX, use
   Server mode.
