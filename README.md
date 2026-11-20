@@ -75,7 +75,7 @@ e.g. `http://<your-computer-ip>:8000`). The browser UI gets the key automaticall
 | **Two OCR engines** | Tesseract (`eng+ben+hin`) for speed; PaddleOCR-VL 1.6 for accuracy, layout, tables and Indic scripts. `Auto` picks the best available. |
 | **Reading order** | Words → lines → paragraphs; VLM output preserves headings, tables and document structure. |
 | **Rich web UI** | Drag-anywhere upload, dark mode, toasts, keyboard shortcuts, page previews, per-page “digital text / OCR” badges, copy/download (MD/TXT/JSON)/share, delete files, responsive layout. |
-| **MCQ dataset builder** | A dedicated **MCQ dataset** page turns a question paper (PDF or image) into a reviewable dataset: question stem, options, answer and explanation are detected in English/বাংলা/हिन्दी, then exported as **RAG chunks**, **SFT chat / Alpaca** fine-tuning pairs, **CSV** or a **ZIP** bundle. |
+| **MCQ dataset builder** | A dedicated **MCQ dataset** page turns a question paper into a reviewable dataset ([guide](docs/mcq-datasets.md)): question stem, options, answer and explanation are detected in English/বাংলা/हिन्दी, then exported as **RAG chunks**, **SFT chat / Alpaca** fine-tuning pairs, **CSV** or a **ZIP** bundle. |
 | **Android app** | Server mode (all formats/languages) + offline mode (on-device Tesseract with bundled language data), camera capture, history, share. |
 | **Research tooling** | Synthetic multilingual document generation, LoRA/full fine-tuning of TrOCR, CER/WER evaluation, hard-example mining. |
 
