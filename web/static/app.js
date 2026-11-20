@@ -218,6 +218,10 @@ function renderOutput(job) {
     $("metaWords").textContent = `${wordCount(text)} words`;
     $("metaChars").textContent = `${text.length.toLocaleString()} chars`;
     const linked = pages.some(p => (p.boxes || []).length > 0);
+    const linkedLines = pages.reduce((n, p) => n + (p.boxes || []).length, 0);
+    const linkedChip = $("metaLinked");
+    linkedChip.hidden = !linked;
+    if (linked) linkedChip.textContent = `${linkedLines} linked line${linkedLines === 1 ? "" : "s"}`;
     $("footHint").textContent = (linked && currentTab === "md")
       ? "Hover the text ↔ the page image to locate a line" : "Ready";
   } else {
