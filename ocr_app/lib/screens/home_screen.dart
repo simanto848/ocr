@@ -22,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _urlController = TextEditingController(text: 'http://10.0.2.2:8000');
+  final _keyController = TextEditingController();
   SharedPreferences? _prefs;
 
   ExtractMode _mode = ExtractMode.server;
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _mode = (prefs.getString('mode') == 'offline') ? ExtractMode.offline : ExtractMode.server;
       _language = prefs.getString('language') ?? 'auto';
       _urlController.text = prefs.getString('serverUrl') ?? 'http://10.0.2.2:8000';
+      _keyController.text = prefs.getString('apiKey') ?? '';
     });
   }
 
@@ -59,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await prefs.setString('mode', _mode.name);
     await prefs.setString('language', _language);
     await prefs.setString('serverUrl', _urlController.text.trim());
+    await prefs.setString('apiKey', _keyController.text.trim());
   }
 
   void _notify(String message) {
@@ -114,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (_mode == ExtractMode.offline) {
         result = await OcrService.extract(path, languageChoice: _language, onProgress: _progress);
       } else {
-        final service = ServerService(_urlController.text);
+        final service = ServerService(_urlController.text, apiKey: _keyController.text.trim());
         result = await service.extract(path: path, languageChoice: _language, onProgress: _progress);
       }
       if (!mounted) return;
@@ -133,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _serverInfo = 'connecting…';
     });
     try {
-      final info = await ServerService(_urlController.text).status();
+      final info = await ServerService(_urlController.text, apiKey: _keyController.text.trim()).status();
       if (!mounted) return;
       setState(() => _serverInfo = '${info['engine']} · ${(info['languages'] as List?)?.join(', ')}');
       await _savePrefs();
@@ -149,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _urlController.dispose();
+    _keyController.dispose();
     super.dispose();
   }
 
@@ -234,6 +238,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: OutlineInputBorder(),
                         isDense: true,
                       ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _keyController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: 'API key (needed in LAN mode)',
+                        prefixIcon: Icon(Icons.key),
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                      onChanged: (_) => _savePrefs(),
                     ),
                     const SizedBox(height: 8),
                     Row(

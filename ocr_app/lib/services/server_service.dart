@@ -9,14 +9,18 @@ import 'languages.dart';
 /// Client for the Python extraction server (full format + language support).
 class ServerService {
   final String baseUrl;
+  final String apiKey;
 
-  ServerService(String url)
+  ServerService(String url, {this.apiKey = ''})
       : baseUrl = url.trim().replaceFirst(RegExp(r'/+$'), '');
+
+  Map<String, String> get _headers => apiKey.isEmpty ? {} : {'X-API-Key': apiKey};
 
   Uri _uri(String path) => Uri.parse('$baseUrl$path');
 
   Future<Map<String, dynamic>> status() async {
-    final r = await http.get(_uri('/api/status')).timeout(const Duration(seconds: 8));
+    final r = await http.get(_uri('/api/status'), headers: _headers)
+        .timeout(const Duration(seconds: 8));
     if (r.statusCode != 200) throw Exception('Server returned ${r.statusCode}');
     return jsonDecode(r.body) as Map<String, dynamic>;
   }
@@ -30,6 +34,7 @@ class ServerService {
     onProgress?.call('uploading', 5);
 
     final request = http.MultipartRequest('POST', _uri('/api/upload'))
+      ..headers.addAll(_headers)
       ..fields['lang'] = LanguageChoice.serverValue(languageChoice)
       ..files.add(await http.MultipartFile.fromPath('file', path));
 

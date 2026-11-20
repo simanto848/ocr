@@ -1,5 +1,7 @@
 /* DocExtract client — upload → poll → preview + text/JSON. Polished UX edition. */
 const $ = (id) => document.getElementById(id);
+const API_KEY = document.querySelector('meta[name="ocr-api-key"]')?.content || "";
+const AUTH_HEADERS = API_KEY ? { "X-API-Key": API_KEY } : {};
 let currentJob = null, currentPage = 1, currentTab = "md", pollTimer = null;
 let batchJobs = [], batchTimer = null;
 
@@ -7,7 +9,8 @@ function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-async function api(path, opts) {
+async function api(path, opts = {}) {
+  opts.headers = { ...(opts.headers || {}), ...AUTH_HEADERS };
   const r = await fetch(path, opts);
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
   return r.json();
@@ -102,9 +105,25 @@ async function refreshHistory(activeId) {
       `<span class="hist-body"><span class="hist-name">${esc(j.filename)}</span>` +
       `<span class="hist-sub">${esc(timeAgo(j.created))}</span></span>` +
       `<span class="hist-pill ${pillCls}">${esc(state)}</span>` +
+      (done ? `<button class="hist-mcq" title="Build MCQ dataset" aria-label="Build MCQ dataset from ${esc(j.filename)}">☑</button>` : '') +
       `<button class="hist-del" title="Delete ${esc(j.filename)}" aria-label="Delete ${esc(j.filename)}">` +
       `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3m3 0l-1 13H7L6 7m4 4v6m4-6v6"/></svg></button>`;
     d.onclick = () => selectJob(j.job_id);
+    const mcqBtn = d.querySelector(".hist-mcq");
+    if (mcqBtn) mcqBtn.onclick = async (e) => {
+      e.stopPropagation();
+      try {
+        toast("Building MCQ dataset…", "info", 1600);
+        await api("/api/mcq/build", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ job_id: j.job_id })
+        });
+        if (typeof window.mcqShow === "function") window.mcqShow(j.job_id);
+        refreshHistory(null);
+      } catch (err) {
+        toast("MCQ build failed: " + err.message, "err");
+      }
+    };
     const del = d.querySelector(".hist-del");
     del.onclick = async (e) => {
       e.stopPropagation();
@@ -353,7 +372,7 @@ async function uploadFiles(files) {
   $("previewEmpty").querySelector("strong").textContent = "Uploading your files…";
 
   try {
-    const r = await fetch("/api/upload", { method: "POST", body: fd });
+    const r = await fetch("/api/upload", { method: "POST", body: fd, headers: AUTH_HEADERS });
     const j = await r.json();
     if (!r.ok) throw new Error(j.error || "upload failed");
     batchJobs = (j.jobs || [{ job_id: j.job_id, filename: list[0].name }]).map(x => ({

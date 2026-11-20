@@ -58,8 +58,10 @@ open http://127.0.0.1:8000
 That's it. The launcher waits for the VLM to load before starting the web app, so the UI
 immediately shows **“PaddleOCR-VL ready”**.
 
-For the Android app: `WEB_HOST=0.0.0.0 ./start.sh`, then set the app's server address to your
-computer's LAN IP (e.g. `http://<your-computer-ip>:8000`).
+For the Android app: `WEB_HOST=0.0.0.0 ./start.sh`. LAN mode automatically requires a shared
+secret — the launcher prints a **API key** and stores it in `.cache/run/api_key`. Enter that key
+in the app's **API key** field (and in the server URL field use your computer's LAN IP,
+e.g. `http://<your-computer-ip>:8000`). The browser UI gets the key automatically.
 
 ---
 
@@ -73,6 +75,7 @@ computer's LAN IP (e.g. `http://<your-computer-ip>:8000`).
 | **Two OCR engines** | Tesseract (`eng+ben+hin`) for speed; PaddleOCR-VL 1.6 for accuracy, layout, tables and Indic scripts. `Auto` picks the best available. |
 | **Reading order** | Words → lines → paragraphs; VLM output preserves headings, tables and document structure. |
 | **Rich web UI** | Drag-anywhere upload, dark mode, toasts, keyboard shortcuts, page previews, per-page “digital text / OCR” badges, copy/download (MD/TXT/JSON)/share, delete files, responsive layout. |
+| **MCQ dataset builder** | A dedicated **MCQ dataset** page turns a question paper (PDF or image) into a reviewable dataset: question stem, options, answer and explanation are detected in English/বাংলা/हिन्दी, then exported as **RAG chunks**, **SFT chat / Alpaca** fine-tuning pairs, **CSV** or a **ZIP** bundle. |
 | **Android app** | Server mode (all formats/languages) + offline mode (on-device Tesseract with bundled language data), camera capture, history, share. |
 | **Research tooling** | Synthetic multilingual document generation, LoRA/full fine-tuning of TrOCR, CER/WER evaluation, hard-example mining. |
 
@@ -202,11 +205,54 @@ Shortcuts: `⌘/Ctrl+K` upload · `←`/`→` pages · `Esc` close dialogs.
 
 ---
 
+## MCQ dataset mode
+
+The **MCQ dataset** tab turns multiple-choice question papers into a structured dataset.
+Upload a PDF, photo or text file; the normal extraction pipeline runs, then a parser splits
+the text into individual questions.
+
+- **Detected layouts** — numbering (`1.`, `1)`, `(1)`, `Q1`, `১।`), options on separate lines
+  (`A) …`, `(B) …`, `ক) …`, `ख) …`) or inline on one line, and bullets used as options.
+- **Answers** — inline (`Answer: B`, `Ans - (c)`, `উত্তর: গ`, `उत्तर: ख`), a separate
+  **answer key** block (`Answer Key` / `উত্তরমালা`), a marked option (`**bold**`,
+  `__underline__`, `✔`, `[x]`, trailing `(correct)`), or no answers at all. Choose
+  **Auto-detect** or force one convention.
+- **Passages** — a `Passage:` / `উদ্দীপক` / `निम्नलिखित` block is attached to the questions
+  that follow it.
+- **Review before export** — every question is editable (stem, options, answer, explanation),
+  can be excluded, and is flagged **needs review** when its confidence is low or it has no
+  answer. Edits regenerate the exports immediately.
+- **Exports** — `rag.jsonl` (one self-contained chunk per question, with metadata),
+  `sft_chat.jsonl` (system/user/assistant), `sft_alpaca.jsonl`, `mcq.csv`, `mcq.md`,
+  `dataset_card.md`, deterministic 90/5/5 `splits/`, and a full `zip`.
+
+**AI extraction (optional).** The **Extraction method** selector offers three modes:
+*Heuristic* (regex, no API), *AI model* (a model does the parsing), or *AI + heuristic*
+(heuristic structure with AI-filled answers/explanations). Built-in providers: **Ollama**,
+**NVIDIA NIM**, **OpenRouter**, **OpenCode** (V2 generate API), OpenAI, Gemini, Groq,
+Together, DeepSeek, Mistral, xAI, vLLM and LM Studio. **＋ Add custom provider** registers
+any additional OpenAI-compatible, Ollama-style or OpenCode-style endpoint. API keys are
+stored server-side in `outputs/web/ai_providers.json` and never returned to the browser.
+Use **↻ Models** to refresh the model list and **Test connection** to verify credentials.
+
+Datasets live in `outputs/web/jobs/<job_id>/mcq/`, next to the page renders they came from.
+
+CLI equivalent (works on an existing extraction result, no server needed):
+
+```bash
+source ./env.sh
+python -m mcq --job outputs/web/jobs/<job_id>/result.json --out data/mcq_biology
+python -m mcq --text paper.txt --out data/mcq_x --name "Class 9 Biology"
+```
+
+---
+
 ## Using the Android app
 
 - **Server mode** (default): full format/language support via the Python server. Emulator:
   `http://10.0.2.2:8000`. Physical phone: `http://<computer-LAN-IP>:8000` (same Wi-Fi, start the
-  server with `WEB_HOST=0.0.0.0 ./start.sh`). Tap **Test connection**.
+  server with `WEB_HOST=0.0.0.0 ./start.sh`). LAN mode prints an API key — paste it into the
+  **API key** field. Tap **Test connection**.
 - **Offline mode**: on-device Tesseract for images, camera photos and text files — no network
   needed. For PDF/DOC/DOCX use Server mode.
 
@@ -253,6 +299,15 @@ VLM whenever the service is up.
 | `GET /api/preview?job=…&page=N` | Page image |
 | `GET /api/download?job=…&format=md\|txt\|json` | Download |
 | `POST /api/delete?id=…` / `DELETE /api/job?id=…` | Delete a job and its files |
+| `POST /api/upload` with `kind=mcq` (+ `answer_mode=auto\|inline\|key\|none`) | Extraction job that also builds an MCQ dataset |
+| `POST /api/mcq/build` `{job_id, answer_mode?, name?}` | (Re)build a dataset from an already-extracted job |
+| `GET /api/mcq/job?id=…` | `{job, dataset:{manifest, items}}` for the review UI |
+| `POST /api/mcq/item` `{job_id, item_id, question?, options?, answer?, include?, …}` | Save one review edit and regenerate exports |
+| `GET /api/mcq/download?id=…&format=jsonl\|rag\|sft\|alpaca\|csv\|md\|card\|zip` | Download a dataset |
+| `GET /api/ai/providers` | Provider list (keys masked) |
+| `POST /api/ai/models` `{provider, base_url?, api_key?}` | Fetch model list |
+| `POST /api/ai/test` `{provider, model, ...}` | Test credentials |
+| `POST /api/ai/provider` / `.../configure` / `.../delete` | Manage custom providers |
 | `GET /health` (VLM, :8090) | VLM readiness |
 | `POST /ocr` (VLM, :8090) | `{"image": "/abs/path.png"}` → Markdown |
 
@@ -282,11 +337,13 @@ The web/Android apps use the Tesseract/PaddleOCR-VL engine, not this TrOCR path.
 ## Repository layout
 
 ```
-src/            extraction engine (extract.py), VLM client/service, TrOCR pipeline,
+src/            extraction engine (extract.py), MCQ parser/dataset builder (mcq.py),
+                AI providers (ai_providers.py), AI MCQ extraction (ai_mcq.py),
+                VLM client/service, TrOCR pipeline,
                 detection, layout, training data, model loading, CLI inference
 dataset/        synthetic multilingual document generator (fonts, templates, rendering,
                 augmentation, annotations, validation, stats, preview)
-web/            Flask-free stdlib server (app.py) + static UI (index.html/app.js/style.css)
+web/            Flask-free stdlib server (app.py) + static UI (index.html/app.js/mcq.js/style.css)
 ocr_app/        Flutter Android app (offline + server modes, bundled Indic language data)
 configs/        dataset / augmentation / training YAML configs
 training/       TrOCR fine-tuning entry points        evaluation/  CER/WER + hard-example mining
@@ -302,7 +359,7 @@ env.sh          pins all caches to the external drive
 
 ```bash
 source ./env.sh
-python -m pytest tests/ -q          # 13 tests: extraction + layout + dataset
+python -m pytest tests/ -q          # extraction, layout, dataset, MCQ parser and web API
 cd ocr_app && flutter analyze && flutter test
 ```
 

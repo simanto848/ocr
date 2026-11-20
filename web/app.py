@@ -14,6 +14,16 @@ English + Bangla + Hindi language data (selectable per upload).
   GET  /api/download?job=..&format=md|json|txt → attachment
   DELETE /api/job?id=... (or POST /api/delete?id=...) → remove job + files
 
+MCQ ("dataset" mode)
+  POST /api/upload (kind=mcq + answer_mode=auto|inline|key|none) → job that also
+       builds a dataset under outputs/web/jobs/<id>/mcq/
+  POST /api/mcq/build {job_id, answer_mode?, name?} → (re)build a dataset from an
+       already-extracted job
+  GET  /api/mcq/job?id=...        → {job, dataset:{manifest,items}}
+  POST /api/mcq/item {job_id,item_id,question?,options?,answer?,include?,...}
+       → apply one review edit and regenerate all exports
+  GET  /api/mcq/download?id=..&format=jsonl|rag|sft|alpaca|csv|md|card|zip
+
 Usage:
   source ./env.sh && python web/app.py --port 8000
 """
@@ -50,13 +60,49 @@ JOBS_DIR = WEB_DIR / "jobs"
 INDEX_JSON = WEB_DIR / "jobs.json"
 MAX_UPLOAD = 100 * 1024 * 1024
 _lock = threading.Lock()
+# Bound actual OCR work (threads are cheap; Paddle/MPS inference is not).
+_ocr_slots = threading.Semaphore(max(1, int(os.environ.get("OCR_CONCURRENCY", "2"))))
+# In-memory index with throttled disk flushes: avoids O(n²) rewrites of the
+# whole index on every progress tick of every page.
+_INDEX_CACHE = {}
+
+# --- Security -----------------------------------------------------------------
+# Job IDs are always 12 lowercase hex chars (uuid4().hex[:12]). Rejecting
+# anything else prevents path traversal such as "id=../jobs" from resolving to
+# JOBS_DIR itself and deleting every job.
+JID_RE = re.compile(r"^[a-f0-9]{12}$")
+API_KEY = os.environ.get("OCR_API_KEY", "")
+CORS_ORIGINS = [o.strip() for o in os.environ.get("OCR_CORS_ORIGINS", "").split(",") if o.strip()]
+STATIC_ROOT = (ROOT / "web" / "static").resolve()
+
+
+def _valid_jid(jid: str) -> bool:
+    return bool(jid and JID_RE.fullmatch(jid))
+
+
+def _job_dir(jid: str):
+    """Return the job directory only for a valid ID confined inside JOBS_DIR."""
+    if not _valid_jid(jid):
+        return None
+    d = (JOBS_DIR / jid)
+    try:
+        if not d.resolve().is_relative_to(JOBS_DIR.resolve()):
+            return None
+    except (OSError, ValueError):
+        return None
+    return d
 
 
 def _read_index():
+    key = str(INDEX_JSON)
+    if key in _INDEX_CACHE:
+        return list(_INDEX_CACHE[key][0])
     try:
-        return json.loads(INDEX_JSON.read_text())
+        jobs = json.loads(INDEX_JSON.read_text())
     except Exception:
-        return []
+        jobs = []
+    _INDEX_CACHE[key] = (jobs, time.time())
+    return list(jobs)
 
 
 def _atomic_write(path: _Path, text: str):
@@ -72,8 +118,16 @@ def _atomic_write(path: _Path, text: str):
             pass
 
 
-def _write_index(jobs):
-    _atomic_write(INDEX_JSON, json.dumps(jobs, indent=1))
+def _write_index(jobs, force=False):
+    key = str(INDEX_JSON)
+    _, last = _INDEX_CACHE.get(key, (None, 0.0))
+    now = time.time()
+    # Always persist terminal states; otherwise flush at most every 2 seconds.
+    write = (force or now - last >= 2.0
+             or all(j.get("status") in ("done", "error") for j in jobs))
+    _INDEX_CACHE[key] = (list(jobs), now if write else last)
+    if write:
+        _atomic_write(INDEX_JSON, json.dumps(jobs, indent=1))
 
 
 def _save_job(job):
@@ -83,7 +137,7 @@ def _save_job(job):
         jobs = [j for j in _read_index() if j["job_id"] != job["job_id"]]
         jobs.insert(0, {k: job[k] for k in ("job_id", "filename", "status", "pages", "created",
                                             "error", "progress", "n_pages", "lang",
-                                            "engine", "ocr_engine")
+                                            "engine", "ocr_engine", "kind", "mcq")
                         if k in job})
         _write_index(jobs)
 
@@ -129,6 +183,68 @@ def _to_markdown(filename, pages):
     return "\n".join(lines).strip() + "\n"
 
 
+def _build_mcq(job):
+    """Parse pages into an MCQ dataset — heuristic, AI, or both."""
+    import mcq as mcq_mod
+    import ai_mcq
+    jdir = JOBS_DIR / job["job_id"]
+    source = {"job_id": job["job_id"], "filename": job["filename"]}
+    mode = job.get("ai_mode") or "heuristic"
+    answer_mode = job.get("answer_mode", "auto")
+    warnings, ai_info, ai = [], None, None
+
+    def ai_progress(i, n):
+        _set_progress(job, "ai", i, n, round(90 + 9 * i / max(1, n), 1))
+
+    if mode in ("ai", "hybrid"):
+        provider = job.get("ai_provider") or "ollama"
+        model = job.get("ai_model") or ""
+        ai_info = {"provider": provider, "model": model}
+        try:
+            ai = ai_mcq.extract_mcq(job.get("pages") or [], provider, model,
+                                    answer_mode, on_progress=ai_progress)
+            warnings += ai["warnings"]
+            ai_info["chunks"] = ai["chunks"]
+        except Exception as e:  # noqa: BLE001
+            msg = f"AI extraction failed: {type(e).__name__}: {e}"
+            warnings.append(msg)
+            ai_info["error"] = msg
+
+    items = []
+    if mode in ("heuristic", "hybrid"):
+        parsed = mcq_mod.parse_pages(job.get("pages") or [], source, answer_mode)
+        warnings += parsed["warnings"]
+        items = parsed["items"]
+    if mode == "hybrid":
+        items = ai_mcq.merge_items(items, (ai or {}).get("items") or [])
+    elif mode == "ai":
+        items = (ai or {}).get("items") or []
+
+    base = os.path.splitext(job["filename"])[0] or "Document"
+    bundle = mcq_mod.write_dataset(
+        jdir / "mcq", items, name=job.get("mcq_name") or (base + " — MCQs"),
+        sources=[job["filename"]], warnings=warnings)
+    job["mcq"] = {"stats": bundle["manifest"]["stats"],
+                  "warnings": warnings, "method": mode, "ai": ai_info}
+
+
+def _load_mcq(root):
+    import mcq as mcq_mod
+    bundle = mcq_mod.load_dataset(root)
+    bundle["_root"] = root
+    return bundle
+
+
+def _mcq_download(bundle, fmt):
+    import mcq as mcq_mod
+    return mcq_mod.download_bytes(bundle, fmt)
+
+
+def _public_dataset(bundle):
+    """The dataset as JSON-safe data (drop the internal Path)."""
+    return {k: v for k, v in bundle.items() if k != "_root"}
+
+
 def _set_progress(job, stage, page=0, of=0, percent=0):
     job["progress"] = {"stage": stage, "page": page, "of": of, "percent": percent}
     _save_job(job)
@@ -155,9 +271,10 @@ def _process_job(job_id: str):
                 pct = round(10 + 90 * (i - 1) / max(1, n), 1)
             _set_progress(job, stage, i, n, pct)
 
-        result = extract_file(upload, lang=job.get("lang", "auto"),
-                              out_dir=pages_dir, on_page=_cb,
-                              ocr_engine=job.get("ocr_engine", "auto"))
+        with _ocr_slots:  # bound concurrent Paddle/Tesseract inference
+            result = extract_file(upload, lang=job.get("lang", "auto"),
+                                  out_dir=pages_dir, on_page=_cb,
+                                  ocr_engine=job.get("ocr_engine", "auto"))
         pages = result["pages"]
         # Build previews as soon as each page image exists.
         for pg in pages:
@@ -178,6 +295,8 @@ def _process_job(job_id: str):
         job["language"] = result["language"]
         job["result_json"] = {"file": job["filename"], "language": result["language"],
                               "engine": result["engine"], "pages": pages}
+        if job.get("kind") == "mcq":
+            _build_mcq(job)
         job["status"] = "done"
         _set_progress(job, "done", len(pages), len(pages), 100)
         job.pop("error", None)
@@ -198,18 +317,148 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Cache-Control", "no-store")
+        if API_KEY and ctype.startswith("text/html"):
+            self.send_header("Set-Cookie",
+                             f"ocr_api_key={API_KEY}; Path=/; SameSite=Strict; HttpOnly")
+        # Only an explicit allow-list gets CORS; same-origin needs none. This
+        # stops arbitrary websites from reading/POSTing to a LAN-exposed server.
+        origin = self.headers.get("Origin")
+        if origin and origin in CORS_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Authorization")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
         self.end_headers()
         self.wfile.write(body)
 
     def _json(self, obj, code=200):
         self._send(code, json.dumps(obj, ensure_ascii=False).encode(), "application/json")
 
+    def _authorized(self) -> bool:
+        """Optional shared-secret auth. Same-origin UI passes the key from a
+        meta tag; native clients pass an X-API-Key header."""
+        if not API_KEY:
+            return True
+        supplied = (self.headers.get("X-API-Key")
+                    or self.headers.get("Authorization", "").removeprefix("Bearer ")
+                    or "")
+        if not supplied and "ocr_api_key=" in (self.headers.get("Cookie") or ""):
+            supplied = self.headers["Cookie"].split("ocr_api_key=", 1)[1].split(";", 1)[0]
+        return supplied == API_KEY
+
+    def _csrf_ok(self) -> bool:
+        """Browser state-changing requests must be same-origin. Native clients
+        (Android) send no Origin and rely on the API key instead."""
+        origin = self.headers.get("Origin")
+        if not origin:
+            return True
+        host = self.headers.get("Host", "")
+        return origin in (f"http://{host}", f"https://{host}") or origin in CORS_ORIGINS
+
+    def do_OPTIONS(self):  # noqa: N802
+        self._send(204, b"")
+
+    def _read_json(self):
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            length = 0
+        if length <= 0 or length > 8 * 1024 * 1024:
+            return None
+        try:
+            return json.loads(self.rfile.read(length).decode("utf-8"))
+        except Exception:  # noqa: BLE001
+            return None
+
+    def _mcq_build(self):
+        """Build (or rebuild) an MCQ dataset from an already-extracted job."""
+        payload = self._read_json() or {}
+        jid = str(payload.get("job_id") or "")
+        jdir = _job_dir(jid)
+        if jdir is None or not (jdir / "result.json").is_file():
+            return self._json({"error": "unknown job"}, 404)
+        job = json.loads((jdir / "result.json").read_text())
+        if job.get("status") != "done":
+            return self._json({"error": "job not done"}, 409)
+        if payload.get("answer_mode") in {"auto", "inline", "key", "none"}:
+            job["answer_mode"] = payload["answer_mode"]
+        if payload.get("ai_mode") in {"heuristic", "ai", "hybrid"}:
+            job["ai_mode"] = payload["ai_mode"]
+        for field in ("ai_provider", "ai_model", "name"):
+            if field in payload:
+                job["mcq_name" if field == "name" else field] = str(payload[field] or "")
+        job["kind"] = "mcq"
+        _build_mcq(job)
+        _save_job(job)
+        return self._json({"dataset": _public_dataset(_load_mcq(jdir / "mcq")),
+                           "job": job})
+
+    def _mcq_update_item(self):
+        """Apply one review edit and regenerate every export in place."""
+        import mcq as mcq_mod
+        payload = self._read_json() or {}
+        jdir = _job_dir(str(payload.get("job_id") or ""))
+        if jdir is None or not (jdir / "mcq" / "manifest.json").is_file():
+            return self._json({"error": "no dataset for this job"}, 404)
+        root = jdir / "mcq"
+        bundle = _load_mcq(root)
+        item_id = str(payload.get("item_id") or "")
+        item = next((i for i in bundle["items"] if i.get("id") == item_id), None)
+        if item is None:
+            return self._json({"error": "unknown item"}, 404)
+        if "question" in payload:
+            item["question"] = str(payload["question"])[:2000].strip()
+        if "explanation" in payload:
+            item["explanation"] = str(payload["explanation"])[:4000].strip()
+        if "passage" in payload:
+            item["passage"] = str(payload["passage"])[:4000].strip()
+        if "include" in payload:
+            item["include"] = bool(payload["include"])
+        if "options" in payload and isinstance(payload["options"], list):
+            opts = []
+            for o in payload["options"][:5]:
+                if not isinstance(o, dict):
+                    continue
+                label = mcq_mod.label_of(o.get("label"))
+                text = str(o.get("text") or "").strip()[:1000]
+                if not label or not text:
+                    continue
+                if any(x["label"] == label for x in opts):
+                    continue
+                opts.append({"label": label, "text": text})
+            if opts:
+                item["options"] = opts
+        # Keep answer.text/index in step with the options that were just saved:
+        # an edited option must not leave the old wording behind in the answer.
+        ans = item.get("answer") or {}
+        if ans.get("label"):
+            idx = next((i for i, o in enumerate(item.get("options") or [])
+                        if o["label"] == ans["label"]), None)
+            item["answer"] = (None if idx is None else
+                              {"label": ans["label"],
+                               "text": item["options"][idx]["text"],
+                               "index": idx})
+        if "answer" in payload:
+            mcq_mod.set_item_answer(item, payload["answer"])
+        if "confidence" in payload:
+            try:
+                item["confidence"] = max(0.0, min(1.0, float(payload["confidence"])))
+            except (TypeError, ValueError):
+                pass
+        mcq_mod.write_dataset(
+            root, bundle["items"], name=bundle["manifest"].get("name"),
+            sources=bundle["manifest"].get("sources"),
+            warnings=bundle["manifest"].get("warnings"),
+            dedupe=False)
+        loaded = _load_mcq(root)
+        updated = next((i for i in loaded["items"] if i.get("id") == item_id), None)
+        return self._json({"item": updated, "stats": loaded["manifest"]["stats"]})
+
     def _delete_job(self, jid):
         """Remove a job's directory on disk and its entry in the index."""
-        jdir = (JOBS_DIR / jid).resolve()
-        # Safety: only delete inside our jobs directory.
-        if not jid or not str(jdir).startswith(str(JOBS_DIR.resolve())) or not jdir.is_dir():
+        jdir = _job_dir(jid)
+        if jdir is None or not jdir.is_dir():
             return self._json({"error": "unknown job"}, 404)
         try:
             shutil.rmtree(jdir)
@@ -217,12 +466,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._json({"error": f"could not delete files: {e}"}, 500)
         with _lock:
             jobs = [j for j in _read_index() if j.get("job_id") != jid]
-            _write_index(jobs)
+            _write_index(jobs, force=True)
         return self._json({"ok": True, "job_id": jid})
 
     def do_DELETE(self):  # noqa: N802
         u = urlparse(self.path)
         q = parse_qs(u.query)
+        if not self._authorized() or not self._csrf_ok():
+            return self._json({"error": "unauthorized"}, 401)
         if u.path == "/api/job":
             return self._delete_job((q.get("id") or [""])[0])
         self._json({"error": "not found"}, 404)
@@ -230,11 +481,18 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):  # noqa: N802
         u = urlparse(self.path)
         q = parse_qs(u.query)
+        if u.path.startswith("/api/") and not self._authorized():
+            return self._json({"error": "unauthorized"}, 401)
         if u.path in ("/", "/index.html"):
-            self._send(200, (WEB_DIR.parent.parent / "web" / "static" / "index.html").read_bytes(), "text/html; charset=utf-8")
+            page = (STATIC_ROOT / "index.html").read_bytes()
+            if API_KEY:
+                # Inject the key for same-origin JS (avoids exposing it in JS source).
+                tag = f'<meta name="ocr-api-key" content="{API_KEY}">'.encode()
+                page = page.replace(b"</head>", tag + b"</head>", 1)
+            self._send(200, page, "text/html; charset=utf-8")
         elif u.path.startswith("/static/"):
-            f = (ROOT / "web" / u.path[1:]).resolve()
-            if not str(f).startswith(str(ROOT / "web")) or not f.is_file():
+            f = (STATIC_ROOT / u.path[len("/static/"):]).resolve()
+            if not f.is_relative_to(STATIC_ROOT) or not f.is_file():
                 return self._json({"error": "not found"}, 404)
             self._send(200, f.read_bytes(), mimetypes.guess_type(str(f))[0] or "application/octet-stream")
         elif u.path == "/api/status":
@@ -248,27 +506,59 @@ class Handler(BaseHTTPRequestHandler):
         elif u.path == "/api/history":
             self._json(_read_index())
         elif u.path == "/api/job":
-            jid = (q.get("id") or [""])[0]
-            p = JOBS_DIR / jid / "result.json"
-            if not jid or not p.is_file():
+            jdir = _job_dir((q.get("id") or [""])[0])
+            if jdir is None or not (jdir / "result.json").is_file():
                 return self._json({"error": "unknown job"}, 404)
-            self._json(json.loads(p.read_text()))
+            self._json(json.loads((jdir / "result.json").read_text()))
         elif u.path == "/api/preview":
-            jid = (q.get("job") or [""])[0]
+            jdir = _job_dir((q.get("job") or [""])[0])
+            if jdir is None:
+                return self._json({"error": "unknown job"}, 404)
             try:
                 n = int((q.get("page") or ["1"])[0])
             except ValueError:
                 n = 1
-            p = JOBS_DIR / jid / "preview" / f"page_{n:03d}.png"
+            p = jdir / "preview" / f"page_{n:03d}.png"
             if not p.is_file():
                 return self._json({"error": "no preview yet"}, 404)
             self._send(200, p.read_bytes(), "image/png")
-        elif u.path == "/api/download":
-            jid = (q.get("job") or [""])[0]
-            fmt = (q.get("format") or ["md"])[0]
-            p = JOBS_DIR / jid / "result.json"
-            if not p.is_file():
+        elif u.path == "/api/ai/providers":
+            import ai_providers
+            self._json({"providers": ai_providers.list_providers()})
+        elif u.path == "/api/mcq/job":
+            jdir = _job_dir((q.get("id") or [""])[0])
+            if jdir is None or not (jdir / "result.json").is_file():
                 return self._json({"error": "unknown job"}, 404)
+            job = json.loads((jdir / "result.json").read_text())
+            root = jdir / "mcq"
+            dataset = None
+            if (root / "manifest.json").is_file():
+                try:
+                    dataset = _public_dataset(_load_mcq(root))
+                except Exception as e:  # noqa: BLE001
+                    return self._json({"error": f"could not read dataset: {e}"}, 500)
+            self._json({"job": job, "dataset": dataset})
+        elif u.path == "/api/mcq/download":
+            jdir = _job_dir((q.get("id") or [""])[0])
+            if jdir is None or not (jdir / "mcq" / "manifest.json").is_file():
+                return self._json({"error": "no dataset for this job"}, 404)
+            fmt = (q.get("format") or ["zip"])[0]
+            try:
+                data, name, ctype = _mcq_download(_load_mcq(jdir / "mcq"), fmt)
+            except KeyError:
+                return self._json({"error": f"unknown format '{fmt}'"}, 400)
+            self.send_response(200)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Content-Disposition", f'attachment; filename="{name}"')
+            self.end_headers()
+            self.wfile.write(data)
+        elif u.path == "/api/download":
+            jdir = _job_dir((q.get("job") or [""])[0])
+            if jdir is None or not (jdir / "result.json").is_file():
+                return self._json({"error": "unknown job"}, 404)
+            fmt = (q.get("format") or ["md"])[0]
+            p = jdir / "result.json"
             job = json.loads(p.read_text())
             if job.get("status") != "done":
                 return self._json({"error": "job not done"}, 409)
@@ -292,6 +582,54 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802
         u = urlparse(self.path)
+        if u.path.startswith("/api/") and (not self._authorized() or not self._csrf_ok()):
+            return self._json({"error": "unauthorized"}, 401)
+        if u.path == "/api/mcq/build":
+            return self._mcq_build()
+        if u.path == "/api/ai/models":
+            import ai_providers
+            body = self._read_json() or {}
+            try:
+                models = ai_providers.fetch_models(
+                    str(body.get("provider") or ""),
+                    {k: body[k] for k in ("base_url", "api_key") if k in body})
+            except Exception as e:  # noqa: BLE001
+                return self._json({"error": f"{type(e).__name__}: {e}"}, 502)
+            default = ""
+            try:
+                default = ai_providers.resolve(body.get("provider") or "").get("default_model", "")
+            except KeyError:
+                pass
+            return self._json({"models": models, "default": default})
+        if u.path == "/api/ai/test":
+            import ai_providers
+            body = self._read_json() or {}
+            result = ai_providers.test_provider(
+                str(body.get("provider") or ""), str(body.get("model") or ""),
+                {k: body[k] for k in ("base_url", "api_key") if k in body})
+            return self._json(result, 200 if result["ok"] else 502)
+        if u.path == "/api/ai/provider":
+            import ai_providers
+            body = self._read_json() or {}
+            try:
+                return self._json(ai_providers.add_custom(body), 201)
+            except ValueError as e:
+                return self._json({"error": str(e)}, 400)
+        if u.path in ("/api/ai/provider/configure", "/api/ai/provider/delete"):
+            import ai_providers
+            body = self._read_json() or {}
+            pid = str(body.get("id") or "")
+            try:
+                if u.path.endswith("delete"):
+                    ok = ai_providers.remove_custom(pid)
+                    if not ok:
+                        return self._json({"error": "unknown custom provider"}, 404)
+                    return self._json({"ok": True})
+                return self._json(ai_providers.configure(pid, body))
+            except KeyError as e:
+                return self._json({"error": str(e)}, 404)
+        if u.path == "/api/mcq/item":
+            return self._mcq_update_item()
         if u.path == "/api/delete":
             q = parse_qs(u.query)
             return self._delete_job((q.get("id") or [""])[0])
@@ -316,6 +654,17 @@ class Handler(BaseHTTPRequestHandler):
         engine = (fields.get("engine") or "auto").strip()
         if engine not in {"auto", "vlm", "tesseract"}:
             engine = "auto"
+        kind = (fields.get("kind") or "ocr").strip()
+        if kind not in {"ocr", "mcq"}:
+            kind = "ocr"
+        answer_mode = (fields.get("answer_mode") or "auto").strip()
+        if answer_mode not in {"auto", "inline", "key", "none"}:
+            answer_mode = "auto"
+        ai_mode = (fields.get("ai_mode") or "heuristic").strip()
+        if ai_mode not in {"heuristic", "ai", "hybrid"}:
+            ai_mode = "heuristic"
+        ai_provider = (fields.get("ai_provider") or "ollama").strip()
+        ai_model = (fields.get("ai_model") or "").strip()
 
         job_ids, jobs_meta, errors = [], [], []
         for fname, data in files:
@@ -334,13 +683,16 @@ class Handler(BaseHTTPRequestHandler):
             (jdir / stored).write_bytes(data)
             job = {"job_id": job_id, "filename": fname, "stored": stored,
                    "lang": lang, "ocr_engine": engine, "status": "queued",
+                   "kind": kind, "answer_mode": answer_mode,
+                   "ai_mode": ai_mode, "ai_provider": ai_provider,
+                   "ai_model": ai_model,
                    "pages": [], "n_pages": 0,
                    "created": time.strftime("%Y-%m-%d %H:%M:%S"),
                    "progress": {"stage": "queued", "page": 0, "of": 0, "percent": 0}}
             _save_job(job)
             threading.Thread(target=_process_job, args=(job_id,), daemon=True).start()
             job_ids.append(job_id)
-            jobs_meta.append({"job_id": job_id, "filename": fname})
+            jobs_meta.append({"job_id": job_id, "filename": fname, "kind": kind})
         if not job_ids:
             return self._json({"error": "none of the files were supported", "errors": errors}, 400)
         # `job_id` kept for backwards compatibility with single-file clients.

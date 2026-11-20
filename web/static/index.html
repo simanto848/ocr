@@ -26,6 +26,10 @@
       <small>PDF · Word · Images → text</small>
     </span>
   </div>
+  <nav class="viewnav" role="tablist" aria-label="Sections">
+    <button id="navText" class="viewnav-btn active" role="tab" aria-selected="true">Extract text</button>
+    <button id="navMcq" class="viewnav-btn" role="tab" aria-selected="false">MCQ dataset</button>
+  </nav>
   <div class="topbar-right">
     <div id="engineChip" class="status-chip" title="Checking engine…">
       <span class="status-dot"></span><span class="status-text">checking engine…</span>
@@ -40,7 +44,7 @@
   </div>
 </header>
 
-<div class="layout">
+<div class="layout" id="viewText">
   <!-- ============ LEFT SIDEBAR ============ -->
   <aside class="sidebar">
     <section class="panel upload-panel">
@@ -201,6 +205,207 @@
   </section>
 </div>
 
+<!-- ============ MCQ DATASET VIEW ============ -->
+<div class="mcq-view" id="viewMcq" hidden>
+  <aside class="mcq-side">
+    <section class="panel upload-panel">
+      <div class="panel-title"><span class="title-ico">☑</span> New MCQ dataset</div>
+      <div id="mcqDrop" class="drop" tabindex="0" role="button" aria-label="Upload a question paper">
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M3 9v10a2 2 0 0 0 2 2h4M11 9h6M11 13h6M11 17h4"/></svg>
+        </div>
+        <div class="drop-title">Drop a question paper</div>
+        <div class="drop-sub">or <span class="browse-link">browse your files</span></div>
+        <div class="drop-formats"><span>PDF</span><span>PNG</span><span>JPG</span><span>DOCX</span><span>TXT</span></div>
+        <div class="drop-hint">MCQs auto-detected in English · বাংলা · हिन्दी</div>
+        <input id="mcqFileInput" type="file" hidden
+               accept=".pdf,.doc,.docx,.rtf,.odt,.txt,.md,.html,.htm,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff,.gif">
+      </div>
+      <div class="field">
+        <label for="mcqAnswerMode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 6L9 17l-5-5"/></svg>
+          Answer layout
+        </label>
+        <div class="select-wrap">
+          <select id="mcqAnswerMode" class="select">
+            <option value="auto">Auto-detect (recommended)</option>
+            <option value="inline">Inline — “Answer: B”</option>
+            <option value="key">Separate answer key</option>
+            <option value="none">No answers — questions only</option>
+          </select>
+        </div>
+        <p class="field-hint">Answers can be inline, in a key at the end, or marked with bold/✓.</p>
+      </div>
+      <div class="field">
+        <label for="mcqAiMode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5L12 14.8 7.5 16.7l.9-5L4.8 8.2l5-.7z"/></svg>
+          Extraction method
+        </label>
+        <div class="select-wrap">
+          <select id="mcqAiMode" class="select">
+            <option value="heuristic">Heuristic — fast, no API</option>
+            <option value="ai">AI model — best accuracy</option>
+            <option value="hybrid">AI + heuristic — merged</option>
+          </select>
+        </div>
+        <p class="field-hint">AI results are always reviewable before export.</p>
+      </div>
+
+      <div id="mcqAiBox" class="ai-box" hidden>
+        <div class="ai-box-title">AI provider</div>
+        <div class="field">
+          <label for="mcqProvider">Provider</label>
+          <div class="select-wrap"><select id="mcqProvider" class="select"></select></div>
+        </div>
+        <div class="field">
+          <label for="mcqModel">Model</label>
+          <input id="mcqModel" class="input" list="mcqModelList" placeholder="e.g. llama3.2" autocomplete="off">
+          <datalist id="mcqModelList"></datalist>
+          <div class="ai-model-actions">
+            <button id="mcqRefreshModels" class="mcq-btn" type="button">↻ Models</button>
+            <button id="mcqTestAi" class="mcq-btn" type="button">Test connection</button>
+          </div>
+        </div>
+        <div id="mcqAiConn" class="ai-conn" hidden>
+          <div class="field">
+            <label for="mcqAiKey">API key / token</label>
+            <input id="mcqAiKey" class="input" type="password" autocomplete="off"
+                   placeholder="leave blank to keep the saved key">
+          </div>
+          <div class="field" id="mcqAiUrlField" hidden>
+            <label for="mcqAiUrl">Base URL</label>
+            <input id="mcqAiUrl" class="input" type="url" placeholder="http://127.0.0.1:11434">
+          </div>
+          <button id="mcqSaveConn" class="mcq-btn" type="button">Save connection</button>
+        </div>
+        <button id="mcqAddProvider" class="mcq-btn ai-add" type="button">＋ Add custom provider</button>
+        <p id="mcqAiHint" class="field-hint"></p>
+      </div>
+
+      <div class="field">
+        <label for="mcqLangSelect">OCR language</label>
+        <div class="select-wrap">
+          <select id="mcqLangSelect" class="select">
+            <option value="auto">Auto — English + বাংলা + हिन्दी</option>
+            <option value="en">English only</option>
+            <option value="bn">বাংলা (Bangla) only</option>
+            <option value="hi">हिन्दी (Hindi) only</option>
+            <option value="mixed">English + বাংলা + हिन्दी</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="mcqEngineSelect">OCR engine</label>
+        <div class="select-wrap">
+          <select id="mcqEngineSelect" class="select">
+            <option value="auto">Auto — best available</option>
+            <option value="vlm">PaddleOCR-VL — most accurate</option>
+            <option value="tesseract">Tesseract — fastest</option>
+          </select>
+        </div>
+      </div>
+    </section>
+    <section class="panel history-panel">
+      <div class="panel-title">
+        <span class="title-ico">▦</span> MCQ sets
+        <span id="mcqCount" class="count-pill">0</span>
+      </div>
+      <div id="mcqHistory" class="history"></div>
+    </section>
+  </aside>
+
+  <section class="mcq-main">
+    <div id="mcqEmpty" class="mcq-empty">
+      <svg class="empty-art" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.2">
+        <rect x="22" y="18" width="76" height="84" rx="8"/>
+        <path d="M36 40h48M36 54h48M36 68h30"/>
+        <circle cx="84" cy="82" r="16" fill="var(--panel)"/>
+        <path d="M77 82l5 5 9-10"/>
+      </svg>
+      <strong>Turn a question paper into a dataset</strong>
+      <span>Upload a PDF or photo of multiple-choice questions. We extract each question, its options and the answer, then build export-ready files.</span>
+      <ul class="mcq-empty-list">
+        <li><b>RAG</b><span>one self-contained chunk per question</span></li>
+        <li><b>SFT</b><span>chat &amp; instruction fine-tuning pairs</span></li>
+        <li><b>CSV</b><span>spreadsheet review before you ship</span></li>
+      </ul>
+    </div>
+
+    <div id="mcqLoading" class="mcq-empty" hidden>
+      <div class="progress-card mcq-progress">
+        <div class="progress-head">
+          <span class="spinner"></span>
+          <span id="mcqProgLabel">Working…</span>
+          <span id="mcqProgPct" class="progress-pct">0%</span>
+        </div>
+        <div class="progress-track"><div id="mcqProgBar" class="progress-bar"></div></div>
+        <div id="mcqProgDetail" class="progress-detail"></div>
+      </div>
+    </div>
+
+    <div id="mcqWork" hidden>
+      <header class="mcq-head">
+        <div class="mcq-head-info">
+          <h2 id="mcqTitle">—</h2>
+          <p id="mcqSub">—</p>
+        </div>
+        <div class="mcq-export">
+          <button id="mcqDlZip" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>
+            Download all
+          </button>
+          <div class="mcq-fmt">
+            <button data-fmt="rag">RAG</button>
+            <button data-fmt="sft">SFT</button>
+            <button data-fmt="alpaca">Alpaca</button>
+            <button data-fmt="csv">CSV</button>
+            <button data-fmt="md">Markdown</button>
+            <button data-fmt="card">Card</button>
+          </div>
+        </div>
+      </header>
+      <div id="mcqStats" class="mcq-stats"></div>
+      <div class="mcq-toolbar">
+        <div class="segmented" id="mcqFilters" role="tablist">
+          <button data-filter="all" class="segment active" role="tab" aria-selected="true">All</button>
+          <button data-filter="review" class="segment" role="tab" aria-selected="false">Needs review</button>
+          <button data-filter="missing" class="segment" role="tab" aria-selected="false">Missing answer</button>
+        </div>
+        <input id="mcqSearch" class="input" type="search" placeholder="Search questions…" aria-label="Search questions">
+        <span id="mcqVisible" class="mcq-visible"></span>
+      </div>
+      <div id="mcqList" class="mcq-list"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ADD AI PROVIDER MODAL ============ -->
+<div id="aiProviderModal" class="modal" hidden>
+  <div class="modal-card">
+    <button id="aiProviderClose" class="modal-close" aria-label="Close">×</button>
+    <h2>Add a custom AI provider</h2>
+    <p class="modal-note">Any OpenAI-compatible endpoint works — a local vLLM/LM Studio server,
+      NVIDIA NIM, OpenRouter, or your own gateway. Ollama and OpenCode have dedicated modes.</p>
+    <div class="field"><label for="aiNewName">Name</label>
+      <input id="aiNewName" class="input" placeholder="My local model"></div>
+    <div class="field"><label for="aiNewUrl">Base URL</label>
+      <input id="aiNewUrl" class="input" placeholder="https://api.example.com/v1"></div>
+    <div class="field"><label for="aiNewKind">API kind</label>
+      <div class="select-wrap"><select id="aiNewKind" class="select">
+        <option value="openai">OpenAI-compatible /chat/completions</option>
+        <option value="ollama">Ollama /api/chat</option>
+        <option value="opencode">OpenCode V2 API</option>
+      </select></div></div>
+    <div class="field"><label for="aiNewKey">API key (optional)</label>
+      <input id="aiNewKey" class="input" type="password" autocomplete="off"></div>
+    <div class="field"><label for="aiNewModel">Default model (optional)</label>
+      <input id="aiNewModel" class="input" placeholder="model-name"></div>
+    <div class="modal-actions">
+      <button id="aiNewSave" class="btn-primary" type="button">Add provider</button>
+    </div>
+  </div>
+</div>
+
 <div id="toasts" class="toasts" aria-live="polite"></div>
 <div id="helpModal" class="modal" hidden>
   <div class="modal-card">
@@ -216,5 +421,6 @@
 </div>
 
 <script src="/static/app.js"></script>
+<script src="/static/mcq.js"></script>
 </body>
 </html>
