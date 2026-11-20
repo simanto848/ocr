@@ -384,3 +384,14 @@ def test_attach_boxes_noop_without_boxes():
     items = mcq.parse_pages(pages)["items"]
     mcq.attach_boxes(items, pages)
     assert "bbox" not in items[0]["source"]
+
+
+def test_rag_and_sft_exports_include_source_geometry():
+    r = mcq.parse_text(ENGLISH)
+    r["items"][0]["source"].update({
+        "bbox": [10, 20, 400, 45], "line": 0, "filename": "quiz.pdf"})
+    rag = [json.loads(x) for x in mcq.export_rag(r["items"]).splitlines()]
+    assert rag[0]["metadata"]["source_bbox"] == [10, 20, 400, 45]
+    assert rag[0]["metadata"]["source_line"] == 0
+    sft = [json.loads(x) for x in mcq.export_sft(r["items"]).splitlines()]
+    assert sft[0]["metadata"]["source_bbox"] == [10, 20, 400, 45]

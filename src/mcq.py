@@ -716,6 +716,7 @@ def export_rag(items) -> str:
     rows = []
     for it in _exportable(items):
         ans = it.get("answer") or {}
+        source = it.get("source") or {}
         rows.append({
             "id": it["uid"],
             "text": render_block(it, with_answer=True),
@@ -725,8 +726,10 @@ def export_rag(items) -> str:
                 "answer_text": ans.get("text"),
                 "explanation": it.get("explanation") or "",
                 "language": it.get("language"),
-                "source_file": (it.get("source") or {}).get("filename"),
-                "source_page": (it.get("source") or {}).get("page"),
+                "source_file": source.get("filename"),
+                "source_page": source.get("page"),
+                "source_bbox": source.get("bbox"),
+                "source_line": source.get("line"),
                 "confidence": it.get("confidence"),
             },
         })
@@ -764,7 +767,8 @@ def export_sft(items) -> str:
             {"role": "user", "content": _sft_user(it)},
             {"role": "assistant", "content": _sft_assistant(it)},
         ], "metadata": {"uid": it["uid"], "language": it.get("language"),
-                        "source_file": (it.get("source") or {}).get("filename")}})
+                        "source_file": (it.get("source") or {}).get("filename"),
+                        "source_bbox": (it.get("source") or {}).get("bbox")}})
     return _jsonl(rows)
 
 
