@@ -177,18 +177,21 @@ def ocr_image(image_path: Path, lang: str = "auto", psm: int = 3,
         return text, lines
 
 
-def _ocr_with_engine(image_path: Path, lang: str, engine: str, on_page=None):
+def _ocr_with_engine(image_path: Path, lang: str, engine: str, on_page=None,
+                     page: int = 1, total: int = 1, vlm_ok: bool = True):
     """OCR a page with the requested engine.
 
-    engine: 'auto' (VLM when available, else Tesseract), 'vlm', 'tesseract'.
+    `vlm_ok` is resolved ONCE per document by extract_file — a 100-page PDF must
+    not make 100 health-check calls. `page`/`total` are real page numbers so the
+    UI progress bar advances instead of sticking at 10%.
     Returns (text, boxes, engine_name).
     """
-    from vlm_client import available as vlm_available, ocr_image as vlm_ocr
+    from vlm_client import ocr_image as vlm_ocr
 
-    want_vlm = engine == "vlm" or (engine == "auto" and vlm_available())
+    want_vlm = engine != "tesseract" and vlm_ok
     if want_vlm:
         if on_page:
-            on_page(1, 1, "vlm")
+            on_page(page, total, "vlm")
         try:
             r = vlm_ocr(str(image_path))
             text = (r.get("markdown") or r.get("text") or "").strip()
@@ -215,7 +218,8 @@ def _save_page_image(src: Path, out_dir: Path, n: int) -> Path:
     return dst
 
 
-def _pdf_pages(path: Path, out_dir: Path, lang: str, dpi: int, on_page, engine: str):
+def _pdf_pages(path: Path, out_dir: Path, lang: str, dpi: int, on_page, engine: str,
+               vlm_ok: bool = True):
     import pypdfium2 as pdfium
     pdf = pdfium.PdfDocument(str(path))
     scale = dpi / 72.0
@@ -233,7 +237,8 @@ def _pdf_pages(path: Path, out_dir: Path, lang: str, dpi: int, on_page, engine: 
         if len(re.sub(r"\s", "", digital)) >= MIN_DIGITAL_CHARS and not _text_is_garbled(digital):
             text, boxes, source = digital, [], "digital"
         else:
-            text, boxes, _ = _ocr_with_engine(rendered, lang, engine, on_page)
+            text, boxes, _ = _ocr_with_engine(rendered, lang, engine, on_page,
+                                              page=i + 1, total=total, vlm_ok=vlm_ok)
             source = "ocr"
         pages.append({"page": i + 1, "text": text, "boxes": boxes,
                       "source": source, "render": rendered.name})
@@ -241,7 +246,8 @@ def _pdf_pages(path: Path, out_dir: Path, lang: str, dpi: int, on_page, engine: 
     return pages
 
 
-def _docx_pages(path: Path, out_dir: Path, lang: str, engine: str = "auto"):
+def _docx_pages(path: Path, out_dir: Path, lang: str, engine: str = "auto",
+                vlm_ok: bool = True):
     import docx
     from PIL import Image
     import io
@@ -271,7 +277,7 @@ def _docx_pages(path: Path, out_dir: Path, lang: str, engine: str = "auto"):
             img_no += 1
             tmp = out_dir / f"embedded_{img_no}.png"
             im.save(tmp, "PNG")
-            text, boxes, _ = _ocr_with_engine(tmp, lang, engine)
+            text, boxes, _ = _ocr_with_engine(tmp, lang, engine, vlm_ok=vlm_ok)
             if text.strip():
                 pages.append({"page": len(pages) + 1, "text": text, "boxes": boxes,
                               "source": "ocr", "render": None,
@@ -331,15 +337,25 @@ def extract_file(path, lang="auto", out_dir=None, dpi=200, on_page=None,
     out_dir.mkdir(parents=True, exist_ok=True)
     lang = _lang_arg(lang)
 
+    # Resolve VLM availability ONCE for the whole document.
+    from vlm_client import available as vlm_available
+    vlm_ok = (ocr_engine != "tesseract") and vlm_available()
+    if ocr_engine == "vlm" and not vlm_ok:
+        raise RuntimeError(
+            "PaddleOCR-VL selected but its service is not running. "
+            "Start src/vlm_service.py (./run_vlm.sh) or choose Auto/Tesseract."
+        )
+
     if ext in IMAGE_EXTS:
-        text, boxes, _ = _ocr_with_engine(path, lang, ocr_engine, on_page)
+        text, boxes, _ = _ocr_with_engine(path, lang, ocr_engine, on_page,
+                                          page=1, total=1, vlm_ok=vlm_ok)
         _save_page_image(path, out_dir, 1)
         pages = [{"page": 1, "text": text, "boxes": boxes, "source": "ocr",
                   "render": "page_001.png"}]
     elif ext in PDF_EXTS:
-        pages = _pdf_pages(path, out_dir, lang, dpi, on_page, ocr_engine)
+        pages = _pdf_pages(path, out_dir, lang, dpi, on_page, ocr_engine, vlm_ok)
     elif ext == ".docx":
-        pages = _docx_pages(path, out_dir, lang, ocr_engine)
+        pages = _docx_pages(path, out_dir, lang, ocr_engine, vlm_ok)
     else:
         pages = _plain_text_pages(path, lang)
 
@@ -349,15 +365,12 @@ def extract_file(path, lang="auto", out_dir=None, dpi=200, on_page=None,
         if not pg.get("render"):
             _make_text_preview(pg, out_dir)
     has_ocr = any(pg.get("source") == "ocr" for pg in pages)
-    if has_ocr and ocr_engine != "tesseract":
+    if has_ocr and vlm_ok:
         try:
-            from vlm_client import available as vlm_available, status as vlm_status
-            if vlm_available():
-                engine_name = (vlm_status().get("engine") or "PaddleOCR-VL")
-            else:
-                engine_name = _tesseract_version()
+            from vlm_client import status as vlm_status
+            engine_name = (vlm_status().get("engine") or "PaddleOCR-VL")
         except Exception:
-            engine_name = _tesseract_version()
+            engine_name = "PaddleOCR-VL"
     else:
         engine_name = _tesseract_version()
     return {"pages": pages, "engine": engine_name, "language": lang,
